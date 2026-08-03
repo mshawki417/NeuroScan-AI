@@ -1,0 +1,28 @@
+<section class="testimonials" id="testimonials" aria-label="Customer testimonials">
+  <div class="section-container">
+    <div class="testimonials-header" data-aos="fade-up">
+      <span class="section-label">{{ 'test_label' | translate }}</span>
+      <h2 class="section-title">{{ 'test_title' | translate }}</h2>
+      <p class="section-subtitle">{{ 'test_subtitle' | translate }}</p>
+    </div>
+    <div *ngIf="testimonials.length === 0" class="placeholder-block" data-aos="fade-up">
+      <p>{{ 'test_coming_soon' | translate }}</p>
+    </div>
+    <div *ngIf="testimonials.length > 0" class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let t of testimonials; let i = index"
+           [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="i * 100">
+        <div class="stars" aria-label="5 out of 5 stars">
+          <mat-icon *ngFor="let s of stars(t.rating)" aria-hidden="true">star</mat-icon>
+        </div>
+        <blockquote class="quote">"{{ t.quote }}"</blockquote>
+        <div class="author">
+          <span class="avatar" [attr.data-color]="t.avatarColor">{{ t.avatar }}</span>
+          <div>
+            <p class="author-name">{{ t.name }}</p>
+            <p class="author-role">{{ t.role }}, {{ t.company }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
