@@ -1,111 +1,270 @@
-<div class="page fade-up">
-  <div class="page-head">
-    <h2 class="page-title">Upload MRI Scan</h2>
-    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Upload</span></div>
-  </div>
+<div class="upload-page">
 
+  <!-- ── MAIN LAYOUT (fills viewport) ── -->
   <div class="upload-layout">
-    <!-- LEFT: MRI Machine visual -->
-    <div class="mri-machine-panel">
-        <img src="assets/images/mri-machine.png" alt="MRI Machine" class="w-full h-auto object-cover rounded-xl shadow-lg" style="max-height: 500px;">
-      <div class="machine-overlay-text">
-        <div class="machine-badge">
-          <div class="pulse-dot"></div>
-          AI-Powered Neuro Imaging
-        </div>
-        <div class="machine-sub">Accurate · Fast · Reliable</div>
+
+    <!-- LEFT: MRI Room full-height image -->
+    <div class="image-panel">
+      <svg class="room-svg" viewBox="0 0 620 820" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="roomBg" cx="50%" cy="35%" r="65%">
+            <stop offset="0%"   stop-color="#1a2a4a"/>
+            <stop offset="100%" stop-color="#06090f"/>
+          </radialGradient>
+          <radialGradient id="mriGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#1e4080" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <linearGradient id="machineBody" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#1a3560"/>
+            <stop offset="50%"  stop-color="#243a7a"/>
+            <stop offset="100%" stop-color="#162a58"/>
+          </linearGradient>
+          <linearGradient id="tableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#1e3060"/>
+            <stop offset="100%" stop-color="#101828"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Room background -->
+        <rect width="620" height="820" fill="url(#roomBg)"/>
+
+        <!-- Ceiling -->
+        <rect x="0"   y="0"   width="620" height="60"  fill="#0d1525" opacity=".95"/>
+        <rect x="0"   y="55"  width="620" height="3"   fill="rgba(255,255,255,.06)"/>
+        <!-- Ceiling light panels -->
+        <rect x="160" y="8"   width="130" height="35"  rx="4" fill="#f0f4ff" opacity=".07"/>
+        <rect x="330" y="8"   width="130" height="35"  rx="4" fill="#f0f4ff" opacity=".05"/>
+        <!-- Ceiling light glow -->
+        <ellipse cx="225" cy="85" rx="120" ry="40" fill="rgba(200,220,255,.04)"/>
+
+        <!-- Left wall -->
+        <rect x="0"   y="60"  width="90"  height="760" fill="#0a1220"/>
+        <rect x="88"  y="60"  width="2"   height="760" fill="rgba(255,255,255,.04)"/>
+        <!-- Right wall -->
+        <rect x="530" y="60"  width="90"  height="760" fill="#0a1220"/>
+        <rect x="530" y="60"  width="2"   height="760" fill="rgba(255,255,255,.04)"/>
+
+        <!-- Floor -->
+        <rect x="0"   y="680" width="620" height="140" fill="#080d18"/>
+        <rect x="0"   y="678" width="620" height="3"   fill="rgba(255,255,255,.05)"/>
+        <!-- Floor tiles subtle lines -->
+        <line x1="0" y1="720" x2="620" y2="720" stroke="rgba(255,255,255,.025)" stroke-width="1"/>
+        <line x1="0" y1="760" x2="620" y2="760" stroke="rgba(255,255,255,.015)" stroke-width="1"/>
+        <line x1="155" y1="678" x2="155" y2="820" stroke="rgba(255,255,255,.02)" stroke-width="1"/>
+        <line x1="310" y1="678" x2="310" y2="820" stroke="rgba(255,255,255,.02)" stroke-width="1"/>
+        <line x1="465" y1="678" x2="465" y2="820" stroke="rgba(255,255,255,.02)" stroke-width="1"/>
+
+        <!-- MRI Machine body -->
+        <rect x="95"  y="200" width="430" height="380" rx="28" fill="url(#machineBody)" stroke="#2a4a8a" stroke-width="2"/>
+        <rect x="100" y="205" width="420" height="370" rx="26" fill="#0d1830"/>
+
+        <!-- Machine top highlight -->
+        <rect x="95"  y="200" width="430" height="20" rx="14" fill="rgba(255,255,255,.06)"/>
+
+        <!-- MRI Tunnel (center opening) -->
+        <ellipse cx="310" cy="390" rx="110" ry="105" fill="#050910" stroke="#1e3a80" stroke-width="2.5"/>
+        <ellipse cx="310" cy="390" rx="100" ry="96"  fill="#060b14" stroke="#264a9a" stroke-width="1.5"/>
+        <ellipse cx="310" cy="390" rx="88"  ry="84"  fill="#070d1a" stroke="#1e3880" stroke-width="1"/>
+
+        <!-- Tunnel inner rings (depth effect) -->
+        <ellipse cx="310" cy="390" rx="78" ry="74" fill="none" stroke="rgba(59,142,240,.3)" stroke-width=".8"/>
+        <ellipse cx="310" cy="390" rx="66" ry="62" fill="none" stroke="rgba(34,211,238,.2)" stroke-width=".6"/>
+        <ellipse cx="310" cy="390" rx="54" ry="50" fill="none" stroke="rgba(59,142,240,.15)" stroke-width=".5"/>
+
+        <!-- Blue ambient glow inside tunnel -->
+        <ellipse cx="310" cy="390" rx="85" ry="80" fill="rgba(29,111,220,.06)"/>
+        <ellipse cx="310" cy="390" rx="55" ry="50" fill="rgba(34,211,238,.04)"/>
+
+        <!-- Left side panel -->
+        <rect x="97"  y="240" width="28" height="80" rx="4" fill="#0c1828"/>
+        <circle cx="111" cy="260" r="6"  fill="#22c55e" opacity=".9" filter="url(#glow)"/>
+        <rect   x="104" y="278" width="14" height="2" rx="1" fill="#22d3ee" opacity=".6"/>
+        <rect   x="104" y="285" width="14" height="2" rx="1" fill="#22d3ee" opacity=".4"/>
+        <rect   x="104" y="292" width="14" height="2" rx="1" fill="#3b8ef0" opacity=".3"/>
+        <circle cx="111" cy="308" r="4"  fill="#3b8ef0" opacity=".7"/>
+
+        <!-- Right side panel -->
+        <rect x="495" y="240" width="28" height="80" rx="4" fill="#0c1828"/>
+        <circle cx="509" cy="260" r="6"  fill="#22c55e" opacity=".9" filter="url(#glow)"/>
+        <rect   x="502" y="278" width="14" height="2" rx="1" fill="#3b8ef0" opacity=".5"/>
+        <rect   x="502" y="285" width="14" height="2" rx="1" fill="#3b8ef0" opacity=".3"/>
+
+        <!-- Machine top logo area -->
+        <rect x="240" y="215" width="140" height="28" rx="6" fill="rgba(29,111,220,.15)" stroke="rgba(59,142,240,.2)" stroke-width=".8"/>
+        <text x="310" y="234" text-anchor="middle" fill="#3b8ef0" font-size="11" font-weight="600" letter-spacing="2">NEUROSCAN</text>
+
+        <!-- Patient table -->
+        <rect x="140" y="555" width="340" height="18"  rx="7" fill="url(#tableGrad)" stroke="#1e3060" stroke-width="1.2"/>
+        <rect x="155" y="490" width="310" height="68"  rx="10" fill="#111e3c" stroke="#162040" stroke-width="1"/>
+        <!-- Patient on table (silhouette) -->
+        <ellipse cx="270" cy="488" rx="30" ry="13" fill="#1a2a50" opacity=".8"/>
+        <rect    x="170" y="499" width="190" height="10" rx="4" fill="#162040" opacity=".7"/>
+        <rect    x="165" y="509" width="200" height="6"  rx="3" fill="#132038" opacity=".5"/>
+
+        <!-- Table pedestal -->
+        <rect x="240" y="573" width="80"  height="100" rx="6" fill="#0c1525"/>
+        <rect x="210" y="668" width="140" height="12"  rx="4" fill="#0a1220" stroke="#162040" stroke-width="1"/>
+
+        <!-- Machine glow radial -->
+        <ellipse cx="310" cy="390" rx="200" ry="180" fill="url(#mriGlow)" opacity=".7"/>
+
+        <!-- Floor reflection -->
+        <ellipse cx="310" cy="695" rx="180" ry="14" fill="rgba(29,111,220,.08)"/>
+
+        <!-- Ambient light from tunnel -->
+        <ellipse cx="310" cy="390" rx="130" ry="120" fill="none" stroke="rgba(59,142,240,.08)" stroke-width="20"/>
+      </svg>
+
+      <!-- Drop zone overlay on image -->
+      <div class="dropzone-overlay">
+        @if (!file()) {
+          <div class="drop-zone" [class.drag-over]="drag()"
+            (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+            <div class="drop-cloud">
+              <svg width="44" height="44" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5" viewBox="0 0 24 24">
+                <polyline points="16 16 12 12 8 16"/>
+                <line x1="12" y1="12" x2="12" y2="21"/>
+                <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
+              </svg>
+            </div>
+            <h3>Drag &amp; Drop MRI Files</h3>
+            <p>or</p>
+            <label class="btn-choose">
+              Choose Files
+              <input type="file" accept=".dcm,.nii,.jpg,.jpeg,.png,.bmp,.tiff" (change)="onSelect($event)" hidden/>
+            </label>
+            <div class="drop-formats">Supported formats: DICOM, NIfTI, JPG, PNG</div>
+            <div class="drop-formats">Max file size: 200MB</div>
+          </div>
+        }
+
+        @if (file() && !loading()) {
+          <div class="file-ready">
+            <div class="fr-icon">
+              <svg width="28" height="28" fill="none" stroke="#22d3ee" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="fr-info">
+              <div class="fr-name">{{ file()!.name }}</div>
+              <div class="fr-size">{{ fmtSize(file()!.size) }}</div>
+            </div>
+            <button class="fr-remove" (click)="reset()">✕</button>
+          </div>
+        }
+
+        @if (loading()) {
+          <div class="loading-overlay">
+            <div class="loading-spinner">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+                <circle cx="26" cy="26" r="22" stroke="rgba(255,255,255,.1)" stroke-width="3"/>
+                <circle cx="26" cy="26" r="22" stroke="#22d3ee" stroke-width="3"
+                  stroke-linecap="round" stroke-dasharray="100 40"
+                  style="animation:spin 1s linear infinite;transform-origin:center"/>
+              </svg>
+            </div>
+            <div class="loading-text">
+              Analyzing with {{ model() === 'convnext_tiny' ? 'ConvNeXt-Tiny' : 'EfficientNet-B4' }}…
+            </div>
+            <div class="prog-wrap">
+              <div class="prog-bar">
+                <div class="prog-fill" [style.width.%]="progress()"></div>
+              </div>
+              <span class="prog-pct">{{ progress() }}%</span>
+            </div>
+            @if (demoMode()) {
+              <div class="demo-badge">⚡ Demo Mode — Backend Offline</div>
+            }
+          </div>
+        }
       </div>
-    </div>
 
-    <!-- CENTER: Drop zone -->
-    <div class="center-col">
-      @if (!file()) {
-        <div class="drop-zone" [class.drag-over]="drag()"
-          (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
-          <div class="drop-icon">
-            <svg width="40" height="40" fill="none" stroke="#3b8ef0" stroke-width="1.5" viewBox="0 0 24 24">
-              <polyline points="16 16 12 12 8 16"/>
-              <line x1="12" y1="12" x2="12" y2="21"/>
-              <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
-            </svg>
-          </div>
-          <h3>Drag & Drop MRI Files Here</h3>
-          <p>or</p>
-          <label class="btn btn-primary choose-lbl">
-            Choose Files
-            <input type="file" accept=".dcm,.nii,.jpg,.jpeg,.png" (change)="onSelect($event)" hidden/>
-          </label>
-          <div class="fmt-note">Supported formats: DICOM, NIfTI, JPG, PNG</div>
-          <div class="fmt-note" style="margin-top:4px">Max file size: 200MB</div>
-        </div>
-      }
-
-      @if (file() && !done()) {
-        <div class="file-preview card">
-          <div class="fp-head">
-            <div class="fp-icon">
-              <svg width="22" height="22" fill="none" stroke="#3b8ef0" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </div>
-            <div class="fp-info">
-              <div class="fp-name">{{ file()!.name }}</div>
-              <div class="fp-meta">{{ fmtSize(file()!.size) }}</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" (click)="reset()">Remove</button>
-          </div>
-          @if (loading()) {
-            <div class="prog-bar"><div class="prog-fill"></div></div>
-            <div class="prog-lbl">Analyzing with ConvNeXt-Tiny…</div>
-          } @else {
-            <button class="btn btn-primary analyze-btn" (click)="analyze()">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              Start AI Analysis
+      <!-- Model selector at bottom of image -->
+      @if (!loading()) {
+        <div class="model-selector">
+          <span class="ms-label">Model:</span>
+          @for (m of models; track m.key) {
+            <button class="ms-btn" [class.active]="model() === m.key" (click)="model.set(m.key)">
+              {{ m.name }} <span class="ms-acc">{{ m.acc }}</span>
             </button>
           }
         </div>
       }
 
-      @if (done()) {
-        <div class="done-card card">
-          <div class="done-icon">
-            <svg width="36" height="36" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <h3>Analysis Complete!</h3>
-          <div class="done-result">
-            <div class="dr-item"><span class="dr-lbl">Prediction</span><span class="badge b-yellow">Meningioma</span></div>
-            <div class="dr-item"><span class="dr-lbl">Confidence</span><span class="dr-val">95.6%</span></div>
-          </div>
-          <div class="done-btns">
-            <a routerLink="/analysis" class="btn btn-primary">View Full Analysis</a>
-            <button class="btn btn-ghost" (click)="reset()">Upload Another</button>
-          </div>
+      <!-- Analyze button -->
+      @if (file() && !loading()) {
+        <div class="analyze-wrap">
+          <button class="btn-analyze" (click)="analyze()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Start AI Analysis
+          </button>
         </div>
+      }
+
+      @if (error()) {
+        <div class="error-bar">⚠ {{ error() }}</div>
       }
     </div>
 
-    <!-- RIGHT: Guidelines -->
-    <div class="right-col">
-      <div class="card guide-card">
-        <div class="sec-title">Scan Guidelines</div>
-        @for (g of guidelines; track g) {
-          <div class="guide-row">
-            <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>{{ g }}</span>
+    <!-- RIGHT: Guidelines panel -->
+    <div class="right-panel">
+      <div class="right-inner">
+        <div class="rp-header">
+          <h2 class="rp-title">Upload MRI Scan</h2>
+          <div class="breadcrumb">Home <span>›</span> Upload MRI</div>
+        </div>
+
+        <div class="guide-section">
+          <div class="guide-title">
+            <svg width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Scan Guidelines
           </div>
-        }
-      </div>
-      <div class="card details-card">
-        <div class="sec-title">Scan Details</div>
-        @for (d of [
-          {lbl:'File Name',   val: file()?.name || 'No file selected'},
-          {lbl:'File Size',   val: file() ? fmtSize(file()!.size) : '—'},
-          {lbl:'Dimensions',  val: file() ? '512×512' : '—'},
-          {lbl:'Scan Type',   val: file() ? 'T1-weighted' : '—'}
-        ]; track d.lbl) {
-          <div class="det-row">
-            <span class="det-lbl">{{ d.lbl }}</span>
-            <span class="det-val">{{ d.val }}</span>
+          @for (g of guidelines; track g) {
+            <div class="guide-row">
+              <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>{{ g }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="detail-section">
+          <div class="det-title">Scan Details</div>
+          @if (!file()) {
+            <div class="no-file">No file selected</div>
+          }
+          @for (d of [
+            {lbl:'File Name',   val: file()?.name},
+            {lbl:'File Size',   val: file() ? fmtSize(file()!.size) : null},
+            {lbl:'Dimensions',  val: file() ? '512×512' : null},
+            {lbl:'Scan Type',   val: file() ? 'T1-weighted' : null}
+          ]; track d.lbl) {
+            <div class="det-row">
+              <span class="det-lbl">{{ d.lbl }}</span>
+              <span class="det-val">{{ d.val || '—' }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="backend-section">
+          <div class="det-title">Backend Status</div>
+          <div class="be-row">
+            <div class="be-dot" [class.connected]="!demoMode()"></div>
+            <span class="be-status">{{ demoMode() ? 'Demo Mode (Offline)' : 'Connected' }}</span>
           </div>
-        }
+          <div class="be-url">localhost:8000</div>
+        </div>
       </div>
     </div>
   </div>
