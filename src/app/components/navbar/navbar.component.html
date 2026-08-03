@@ -1,272 +1,37 @@
-<header class="site-header" [class.header--scrolled]="isScrolled" role="banner">
-  <div class="header-inner">
-
-    <!-- Logo -->
-    <div class="header-left">
-      <a class="header-logo" (click)="scrollTo('hero')" role="button" tabindex="0" aria-label="EASO-MANAGE">
-        <img src="assets/images/logo.png" alt="EASO-MANAGE" class="logo-img" />
-        <span class="logo-wordmark">EASO<span class="logo-accent">-MANAGE</span></span>
-      </a>
-    </div>
-
-    <!-- Nav -->
-    <nav class="header-nav" aria-label="Primary navigation" (mouseleave)="leaveNav()">
-      <ul class="nav-list" role="list">
-
-        <!-- Product -->
-        <li class="nav-list__item" (mouseenter)="hoverItem('product')">
-          <button class="nav-btn" [class.nav-btn--active]="activeDropdown==='product'" (click)="scrollTo('features')">
-            {{ 'nav_product' | translate }}
-            <svg class="nav-chevron" [class.nav-chevron--open]="activeDropdown==='product'" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="mega-panel" [class.mega-panel--open]="activeDropdown==='product'" role="region">
-            <div class="mega-inner">
-              <div class="mega-columns">
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_proj_mgmt_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_proj_planning' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_task_mgmt' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_milestone' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_resource' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_collab_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_team_dash' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_doc_sharing' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_realtime' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_mobile' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_integrations_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_erp' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_bim' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_accounting' | translate }}</button></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mega-footer">
-                <button class="mega-view-more" (click)="scrollTo('features')">
-                  {{ 'dd_explore_all' | translate }}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <!-- Features -->
-        <li class="nav-list__item" (mouseenter)="hoverItem('features')">
-          <button class="nav-btn" [class.nav-btn--active]="activeDropdown==='features'" (click)="scrollTo('features')">
-            {{ 'nav_features' | translate }}
-            <svg class="nav-chevron" [class.nav-chevron--open]="activeDropdown==='features'" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="mega-panel" [class.mega-panel--open]="activeDropdown==='features'" role="region">
-            <div class="mega-inner">
-              <div class="mega-columns">
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_precon_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_tender' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_bim_int' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_estimating' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_const_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_proj_mgmt2' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_quality' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_schedule' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_rfi' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_fin_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_budget' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_invoice' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_proj_fin' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_time_track' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_platform_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_analytics' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_doc_mgmt' | translate }}</button></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mega-footer">
-                <button class="mega-view-more" (click)="scrollTo('features')">
-                  {{ 'dd_view_more' | translate }}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <!-- Solutions -->
-        <li class="nav-list__item" (mouseenter)="hoverItem('solutions')">
-          <button class="nav-btn" [class.nav-btn--active]="activeDropdown==='solutions'" (click)="scrollTo('features')">
-            {{ 'nav_solutions' | translate }}
-            <svg class="nav-chevron" [class.nav-chevron--open]="activeDropdown==='solutions'" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="mega-panel" [class.mega-panel--open]="activeDropdown==='solutions'" role="region">
-            <div class="mega-inner">
-              <div class="mega-columns">
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_by_role_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_pm' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_site_eng' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_cfo' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_subcon' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_by_sector_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_commercial' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_infra' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_residential' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('features')">{{ 'dd_industrial' | translate }}</button></li>
-                  </ul>
-                </div>
-                <div class="mega-col">
-                  <p class="mega-col__title">{{ 'dd_by_size_title' | translate }}</p>
-                  <ul>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_small' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_mid' | translate }}</button></li>
-                    <li><button class="mega-link" (click)="scrollTo('pricing')">{{ 'dd_enterprise' | translate }}</button></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mega-footer">
-                <button class="mega-view-more" (click)="scrollTo('features')">
-                  {{ 'dd_see_all' | translate }}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <!-- Pricing -->
-        <li class="nav-list__item" (mouseenter)="hoverItem('')">
-          <button class="nav-btn" (click)="scrollTo('pricing')">{{ 'nav_pricing' | translate }}</button>
-        </li>
-
-        <!-- Enterprise -->
-        <li class="nav-list__item" (mouseenter)="hoverItem('')">
-          <button class="nav-btn" (click)="scrollTo('pricing')">{{ 'nav_enterprise' | translate }}</button>
-        </li>
-
-      </ul>
+<header class="bg-[#0B1B3D] text-white px-6 py-4 flex items-center justify-between shrink-0 shadow-md">
+  <div class="flex items-center space-x-8">
+    <a routerLink="/" class="flex items-center space-x-3">
+      <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+        <i class="fa-solid fa-brain text-white"></i>
+      </div>
+      <span class="text-xl font-bold">NeuroScan AI</span>
+    </a>
+    
+    <nav class="hidden md:flex space-x-2">
+      @for (lnk of links; track lnk.path) {
+        <a [routerLink]="lnk.path" 
+           routerLinkActive="bg-blue-600/20 text-blue-400" 
+           class="px-4 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition-colors font-medium flex items-center space-x-2">
+          <span>{{ lnk.label }}</span>
+        </a>
+      }
     </nav>
+  </div>
 
-    <!-- RIGHT Actions -->
-    <div class="header-actions">
-
-      <!-- Search -->
-      <div class="action-search" [class.action-search--open]="isSearchOpen">
-        <button class="icon-btn" (click)="toggleSearch($event)" [attr.aria-expanded]="isSearchOpen" aria-label="Toggle search">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <div class="search-expand" role="search">
-          <input type="search" class="search-input" [(ngModel)]="searchQuery"
-                 [placeholder]="'nav_search_placeholder' | translate" aria-label="Search" />
-        </div>
+  <div class="flex items-center space-x-4">
+    <a routerLink="/upload" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center space-x-2">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <span>Upload Scan</span>
+    </a>
+    <div class="h-8 w-px bg-white/20 mx-1"></div>
+    <div class="flex items-center space-x-3 cursor-pointer">
+      <div class="text-right hidden sm:block">
+        <p class="text-sm font-semibold leading-none">System Admin</p>
+        <p class="text-xs text-slate-400 mt-1">Admin</p>
       </div>
-
-      <!-- Language -->
-      <div class="action-lang" (click)="$event.stopPropagation()">
-        <button class="lang-trigger" [class.lang-trigger--open]="isLangOpen"
-                (click)="toggleLang($event)" [attr.aria-expanded]="isLangOpen"
-                aria-haspopup="listbox" aria-label="Select language">
-          <svg class="globe-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.5"/>
-            <ellipse cx="9" cy="9" rx="3" ry="7.5" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M1.5 9h15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M2.5 5.5h13M2.5 12.5h13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-          <span class="lang-code">{{ getLangCode(selectedLang.code) }}</span>
-          <svg class="lang-chevron" [class.lang-chevron--open]="isLangOpen" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-            <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <div class="lang-panel" [class.lang-panel--open]="isLangOpen" role="listbox" aria-label="Language options">
-          <div class="lang-regions">
-            <div *ngFor="let region of langRegions" class="lang-region">
-              <p class="lang-region__title">{{ region.region }}</p>
-              <ul>
-                <li *ngFor="let lang of region.langs">
-                  <button class="lang-option"
-                          [class.lang-option--selected]="lang.code === selectedLang.code"
-                          [class.lang-option--rtl]="lang.code.startsWith('ar')"
-                          (click)="selectLang(lang)" role="option"
-                          [attr.aria-selected]="lang.code === selectedLang.code">
-                    <span class="lang-option__flag">{{ lang.flag }}</span>
-                    <span class="lang-option__label">{{ lang.label }}</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <div class="w-10 h-10 rounded-full border border-white/20 bg-slate-700 flex items-center justify-center hover:bg-slate-600 transition-colors">
+        <i class="fa-solid fa-user text-slate-300"></i>
       </div>
-
-      <button class="btn-ghost" (click)="scrollTo('pricing')">{{ 'nav_login' | translate }}</button>
-      <button class="btn-primary" (click)="scrollTo('pricing')">{{ 'nav_demo' | translate }}</button>
     </div>
-
-    <!-- Hamburger -->
-    <button class="hamburger" (click)="toggleMobile()" [class.hamburger--open]="isMobileOpen"
-            [attr.aria-expanded]="isMobileOpen" aria-label="Toggle navigation" aria-controls="mobile-drawer">
-      <span class="hamburger__line"></span>
-      <span class="hamburger__line"></span>
-      <span class="hamburger__line"></span>
-    </button>
   </div>
 </header>
-
-<!-- Mobile Drawer -->
-<div id="mobile-drawer" class="mobile-drawer" [class.mobile-drawer--open]="isMobileOpen" role="dialog" aria-label="Mobile navigation">
-  <nav aria-label="Mobile navigation links">
-    <ul class="mobile-nav-list" role="list">
-      <li><button class="mobile-nav-btn" (click)="scrollTo('features')">{{ 'nav_product' | translate }}</button></li>
-      <li><button class="mobile-nav-btn" (click)="scrollTo('features')">{{ 'nav_features' | translate }}</button></li>
-      <li><button class="mobile-nav-btn" (click)="scrollTo('features')">{{ 'nav_solutions' | translate }}</button></li>
-      <li><button class="mobile-nav-btn" (click)="scrollTo('pricing')">{{ 'nav_pricing' | translate }}</button></li>
-      <li><button class="mobile-nav-btn" (click)="scrollTo('pricing')">{{ 'nav_enterprise' | translate }}</button></li>
-    </ul>
-  </nav>
-  <div class="mobile-cta">
-    <button class="btn-ghost btn-ghost--full" (click)="scrollTo('pricing')">{{ 'nav_login' | translate }}</button>
-    <button class="btn-primary btn-primary--full" (click)="scrollTo('pricing')">{{ 'nav_demo' | translate }}</button>
-  </div>
-</div>
-
-<div class="header-spacer" aria-hidden="true"></div>
