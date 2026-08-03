@@ -1,0 +1,159 @@
+<div class="page fade-up">
+  <div class="page-head">
+    <h2 class="page-title">AI Analysis Result</h2>
+    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>AI Analysis</span></div>
+  </div>
+
+  <div class="analysis-grid">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel card">
+      <div class="pred-label">Prediction</div>
+      <div class="pred-name">Meningioma</div>
+      <div class="conf-score-label">Confidence Score</div>
+      <div class="conf-score">95.6%</div>
+      <span class="badge b-green conf-badge">High Confidence</span>
+
+      <div class="mri-pair">
+        <div class="mri-thumb">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" fill="#06090f"/>
+            <ellipse cx="60" cy="60" rx="48" ry="44" fill="#0e1830" stroke="#1a2a50" stroke-width="1"/>
+            <ellipse cx="60" cy="60" rx="38" ry="34" fill="#0a1220"/>
+            <path d="M42 38 Q60 29 78 38 Q88 52 78 73 Q60 82 42 73 Q32 59 42 38" fill="#0d1428" stroke="#162040" stroke-width=".8"/>
+            <path d="M53 34 Q60 30 67 34" stroke="#1a2a60" stroke-width="1.2" fill="none"/>
+            <path d="M26 56 Q33 50 40 56" stroke="#1a2a60" stroke-width="1" fill="none"/>
+            <path d="M80 56 Q87 50 94 56" stroke="#1a2a60" stroke-width="1" fill="none"/>
+            <ellipse cx="70" cy="46" rx="11" ry="9" fill="#111e3c" stroke="#1e3060" stroke-width=".8"/>
+          </svg>
+          <div class="mri-lbl">Original MRI</div>
+        </div>
+        <div class="mri-thumb">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="gc1" cx="70" cy="46" r="28" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#ff2222" stop-opacity=".95"/>
+                <stop offset="30%"  stop-color="#ff6600" stop-opacity=".75"/>
+                <stop offset="60%"  stop-color="#ffdd00" stop-opacity=".45"/>
+                <stop offset="85%"  stop-color="#0088ff" stop-opacity=".2"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </radialGradient>
+            </defs>
+            <rect width="120" height="120" fill="#06090f"/>
+            <ellipse cx="60" cy="60" rx="48" ry="44" fill="#0e1830" stroke="#1a2a50" stroke-width="1"/>
+            <ellipse cx="60" cy="60" rx="38" ry="34" fill="#0a1220"/>
+            <path d="M42 38 Q60 29 78 38 Q88 52 78 73 Q60 82 42 73 Q32 59 42 38" fill="#0d1428" stroke="#162040" stroke-width=".8"/>
+            <ellipse cx="60" cy="60" rx="48" ry="44" fill="url(#gc1)"/>
+            <!-- Color bar indicator -->
+            <rect x="105" y="10" width="8" height="100" rx="3" fill="url(#gc1)" opacity=".9"/>
+            <text x="108" y="8"  fill="#ff2222" font-size="7" text-anchor="middle">H</text>
+            <text x="108" y="115" fill="#0088ff" font-size="7" text-anchor="middle">L</text>
+          </svg>
+          <div class="mri-lbl">AI Detection (Grad-CAM)</div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <svg width="13" height="13" fill="none" stroke="#3b8ef0" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>The AI model has detected a meningioma with high confidence. Please consult clinical findings and doctor's evaluation for final diagnosis.</span>
+      </div>
+    </div>
+
+    <!-- ── MIDDLE PANELS ── -->
+    <div class="mid-col">
+      <!-- Analysis Overview -->
+      <div class="card">
+        <div class="sec-title">Analysis Overview</div>
+        <div class="overview-grid">
+          @for (item of [
+            {lbl:'Model Used',     val:'ConvNeXt-Tiny'},
+            {lbl:'Inference Time', val:'0.84 sec'},
+            {lbl:'Scan Type',      val:'T1-weighted'},
+            {lbl:'Date Analyzed',  val:'May 20, 2024 - 10:30 AM'}
+          ]; track item.lbl) {
+            <div class="ov-box">
+              <div class="ov-lbl">{{ item.lbl }}</div>
+              <div class="ov-val">{{ item.val }}</div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Probability Distribution -->
+      <div class="card">
+        <div class="sec-title">Probability Distribution</div>
+        @for (p of probs; track p.label) {
+          <div class="prob-row">
+            <div class="prob-top">
+              <span class="prob-lbl">{{ p.label }}</span>
+              <span class="prob-pct" [style.color]="p.color">{{ p.val }}%</span>
+            </div>
+            <div class="prob-track">
+              <div class="prob-bar" [style.width.%]="p.val" [style.background]="p.color"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Tumor Location -->
+      <div class="card">
+        <div class="sec-title">Tumor Location</div>
+        @for (d of [
+          {lbl:'Region',       val:'Right Temporal Lobe'},
+          {lbl:'Bounding Box', val:'x:62 y:40 w:20 h:16'},
+          {lbl:'Size Estimate',val:'~2.4 cm²'},
+          {lbl:'Margin',       val:'Well-defined'}
+        ]; track d.lbl) {
+          <div class="loc-row">
+            <span class="loc-lbl">{{ d.lbl }}</span>
+            <span class="loc-val">{{ d.val }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── RIGHT ACTIONS ── -->
+    <div class="right-col">
+      <div class="card">
+        <div class="sec-title">Actions</div>
+        <div class="action-list">
+          <button class="btn btn-primary action-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF Report
+          </button>
+          <button class="btn btn-ghost action-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Export JSON
+          </button>
+          <button class="btn btn-ghost action-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share Analysis
+          </button>
+          <a routerLink="/upload" class="btn btn-ghost action-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Analyze Another Scan
+          </a>
+        </div>
+      </div>
+
+      <div class="warn-card card">
+        <div class="warn-icon">⚠️</div>
+        <div class="warn-title">Clinical Advisory</div>
+        <p>AI analysis is for decision support only. Always confirm with radiologist review before clinical decision-making.</p>
+      </div>
+
+      <div class="card meta-card">
+        @for (m of [
+          {k:'Scan ID',         v:'MR-2024-125'},
+          {k:'Model Version',   v:'ConvNeXt-Tiny v1.0'},
+          {k:'Checkpoint',      v:'ep014 (0.9940)'},
+          {k:'Format',          v:'ONNX + TorchScript'}
+        ]; track m.k) {
+          <div class="meta-row">
+            <span>{{ m.k }}</span><span>{{ m.v }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

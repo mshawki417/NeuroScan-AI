@@ -1,0 +1,177 @@
+<div class="flex-1 overflow-y-auto bg-slate-50 relative h-full">
+  <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-10">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Project Details</h1>
+      <div class="flex items-center text-sm text-slate-500 mt-1 space-x-2">
+        <a class="hover:text-blue-600 transition-colors" routerLink="/dashboard">Home</a>
+        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        <span class="text-slate-700">Project Details</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="p-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="space-y-6">
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-4">About the Project</h2>
+          <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+            <p>
+              This project aims to develop and evaluate deep learning models for automatic classification of medical imaging scans (Brain MRI).
+            </p>
+            <p>
+              The system provides accurate predictions along with model explainability (Grad-CAM) and comprehensive performance evaluation.
+            </p>
+          </div>
+        </section>
+        
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-4">Dataset</h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <span class="font-medium">Training Images</span>
+              </div>
+              <span class="font-bold text-slate-800">5,712</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
+                  <i class="fa-solid fa-file-import"></i>
+                </div>
+                <span class="font-medium">Testing Images</span>
+              </div>
+              <span class="font-bold text-slate-800">1,311</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
+                  <i class="fa-solid fa-tags"></i>
+                </div>
+                <span class="font-medium">Classes</span>
+              </div>
+              <span class="font-bold text-slate-800">4 (Glioma, Meningioma, Pituitary, No Tumor)</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
+                  <i class="fa-regular fa-image"></i>
+                </div>
+                <span class="font-medium">Image Size</span>
+              </div>
+              <span class="font-bold text-slate-800">224 x 224</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="space-y-6">
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-6">Project Pipeline</h2>
+          <div class="relative pl-4 border-l-2 border-slate-100 space-y-8">
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Data Collection &amp; Preprocessing</h3>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Model Training</h3>
+                <p class="text-xs text-slate-500 mt-1">EfficientNet-B4, ConvNeXt-Tiny, ResNet-50</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Model Evaluation</h3>
+                <p class="text-xs text-slate-500 mt-1">Accuracy, Precision, Recall, F1, MCC, Kappa</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Explainability</h3>
+                <p class="text-xs text-slate-500 mt-1">Grad-CAM, Grad-CAM++, LayerCAM</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Export &amp; Deployment</h3>
+                <p class="text-xs text-slate-500 mt-1">ONNX, TorchScript</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-span-1 lg:col-span-2 space-y-6">
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm overflow-x-auto">
+          <h2 class="text-lg font-bold text-slate-800 mb-4">Models Summary</h2>
+          <table class="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+              <tr class="border-b border-slate-200 text-xs text-slate-500 font-medium uppercase tracking-wider">
+                <th class="py-3 px-4 font-semibold">Model</th>
+                <th class="py-3 px-4 font-semibold">Best Accuracy</th>
+                <th class="py-3 px-4 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm text-slate-700 divide-y divide-slate-100">
+              @for (mod of models; track mod.name) {
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                  <td class="py-4 px-4 font-bold text-slate-800">{{ mod.name }}</td>
+                  <td class="py-4 px-4">{{ mod.acc }}</td>
+                  <td class="py-4 px-4">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
+                          [class.bg-emerald-100]="mod.role === 'Best Performer'"
+                          [class.text-emerald-700]="mod.role === 'Best Performer'"
+                          [class.bg-blue-100]="mod.role === 'Primary Model'"
+                          [class.text-blue-700]="mod.role === 'Primary Model'"
+                          [class.bg-slate-100]="mod.role === 'Baseline'"
+                          [class.text-slate-700]="mod.role === 'Baseline'">
+                      {{ mod.role }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </section>
+        
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Confusion Matrix (EfficientNet-B4)</h2>
+            <img src="assets/images/confusion_matrix_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="Confusion Matrix">
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">ROC Curves (EfficientNet-B4)</h2>
+            <img src="assets/images/roc_curves_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="ROC Curves">
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Training Curves (EfficientNet-B4)</h2>
+            <img src="assets/images/training_curves_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="Training Curves">
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Grad-CAM Visualizations</h2>
+            <img src="assets/images/gradcam_gradcam_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="GradCAM">
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

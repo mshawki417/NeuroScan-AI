@@ -1,0 +1,37 @@
+<header class="bg-[#0B1B3D] text-white px-6 py-4 flex items-center justify-between shrink-0 shadow-md">
+  <div class="flex items-center space-x-8">
+    <a routerLink="/" class="flex items-center space-x-3">
+      <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+        <i class="fa-solid fa-brain text-white"></i>
+      </div>
+      <span class="text-xl font-bold">NeuroScan AI</span>
+    </a>
+    
+    <nav class="hidden md:flex space-x-2">
+      @for (lnk of links; track lnk.path) {
+        <a [routerLink]="lnk.path" 
+           routerLinkActive="bg-blue-600/20 text-blue-400" 
+           class="px-4 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition-colors font-medium flex items-center space-x-2">
+          <span>{{ lnk.label }}</span>
+        </a>
+      }
+    </nav>
+  </div>
+
+  <div class="flex items-center space-x-4">
+    <a routerLink="/upload" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center space-x-2">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <span>Upload Scan</span>
+    </a>
+    <div class="h-8 w-px bg-white/20 mx-1"></div>
+    <div class="flex items-center space-x-3 cursor-pointer">
+      <div class="text-right hidden sm:block">
+        <p class="text-sm font-semibold leading-none">System Admin</p>
+        <p class="text-xs text-slate-400 mt-1">Admin</p>
+      </div>
+      <div class="w-10 h-10 rounded-full border border-white/20 bg-slate-700 flex items-center justify-center hover:bg-slate-600 transition-colors">
+        <i class="fa-solid fa-user text-slate-300"></i>
+      </div>
+    </div>
+  </div>
+</header>

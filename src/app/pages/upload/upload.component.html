@@ -1,0 +1,112 @@
+<div class="page fade-up">
+  <div class="page-head">
+    <h2 class="page-title">Upload MRI Scan</h2>
+    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Upload</span></div>
+  </div>
+
+  <div class="upload-layout">
+    <!-- LEFT: MRI Machine visual -->
+    <div class="mri-machine-panel">
+        <img src="assets/images/mri-machine.png" alt="MRI Machine" class="w-full h-auto object-cover rounded-xl shadow-lg" style="max-height: 500px;">
+      <div class="machine-overlay-text">
+        <div class="machine-badge">
+          <div class="pulse-dot"></div>
+          AI-Powered Neuro Imaging
+        </div>
+        <div class="machine-sub">Accurate · Fast · Reliable</div>
+      </div>
+    </div>
+
+    <!-- CENTER: Drop zone -->
+    <div class="center-col">
+      @if (!file()) {
+        <div class="drop-zone" [class.drag-over]="drag()"
+          (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+          <div class="drop-icon">
+            <svg width="40" height="40" fill="none" stroke="#3b8ef0" stroke-width="1.5" viewBox="0 0 24 24">
+              <polyline points="16 16 12 12 8 16"/>
+              <line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
+            </svg>
+          </div>
+          <h3>Drag & Drop MRI Files Here</h3>
+          <p>or</p>
+          <label class="btn btn-primary choose-lbl">
+            Choose Files
+            <input type="file" accept=".dcm,.nii,.jpg,.jpeg,.png" (change)="onSelect($event)" hidden/>
+          </label>
+          <div class="fmt-note">Supported formats: DICOM, NIfTI, JPG, PNG</div>
+          <div class="fmt-note" style="margin-top:4px">Max file size: 200MB</div>
+        </div>
+      }
+
+      @if (file() && !done()) {
+        <div class="file-preview card">
+          <div class="fp-head">
+            <div class="fp-icon">
+              <svg width="22" height="22" fill="none" stroke="#3b8ef0" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="fp-info">
+              <div class="fp-name">{{ file()!.name }}</div>
+              <div class="fp-meta">{{ fmtSize(file()!.size) }}</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" (click)="reset()">Remove</button>
+          </div>
+          @if (loading()) {
+            <div class="prog-bar"><div class="prog-fill"></div></div>
+            <div class="prog-lbl">Analyzing with ConvNeXt-Tiny…</div>
+          } @else {
+            <button class="btn btn-primary analyze-btn" (click)="analyze()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Start AI Analysis
+            </button>
+          }
+        </div>
+      }
+
+      @if (done()) {
+        <div class="done-card card">
+          <div class="done-icon">
+            <svg width="36" height="36" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>Analysis Complete!</h3>
+          <div class="done-result">
+            <div class="dr-item"><span class="dr-lbl">Prediction</span><span class="badge b-yellow">Meningioma</span></div>
+            <div class="dr-item"><span class="dr-lbl">Confidence</span><span class="dr-val">95.6%</span></div>
+          </div>
+          <div class="done-btns">
+            <a routerLink="/analysis" class="btn btn-primary">View Full Analysis</a>
+            <button class="btn btn-ghost" (click)="reset()">Upload Another</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- RIGHT: Guidelines -->
+    <div class="right-col">
+      <div class="card guide-card">
+        <div class="sec-title">Scan Guidelines</div>
+        @for (g of guidelines; track g) {
+          <div class="guide-row">
+            <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{{ g }}</span>
+          </div>
+        }
+      </div>
+      <div class="card details-card">
+        <div class="sec-title">Scan Details</div>
+        @for (d of [
+          {lbl:'File Name',   val: file()?.name || 'No file selected'},
+          {lbl:'File Size',   val: file() ? fmtSize(file()!.size) : '—'},
+          {lbl:'Dimensions',  val: file() ? '512×512' : '—'},
+          {lbl:'Scan Type',   val: file() ? 'T1-weighted' : '—'}
+        ]; track d.lbl) {
+          <div class="det-row">
+            <span class="det-lbl">{{ d.lbl }}</span>
+            <span class="det-val">{{ d.val }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
