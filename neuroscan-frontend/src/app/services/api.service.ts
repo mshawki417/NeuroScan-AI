@@ -68,12 +68,8 @@ export class ApiService {
    * Set environment variable in your hosting platform:
    *   VITE_API_URL = https://neuroscan-backend.onrender.com
    */
-  readonly BASE: string = (() => {
-    // Angular uses import.meta.env for Vite, or environment.ts for @angular/cli
-    // Check both patterns:
-    const fromEnv =
-      (typeof (import.meta as any).env !== 'undefined' && (import.meta as any).env['VITE_API_URL']) ||
-      '';
+  readonly BASE = 'https://neuroscan-ai-dc1e.onrender.com/api/v1';
+
 
     if (fromEnv) return fromEnv.replace(/\/$/, '') + '/api/v1';
 
