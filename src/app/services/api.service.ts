@@ -25,13 +25,13 @@ export interface PredictResult {
 }
 
 export interface DualResult {
-  scan_id:      string;
-  filename:     string;
-  demo_mode:    boolean;
-  total_ms:     number;
-  analyzed_at:  string;
-  warnings:     string[];
-  clinical_note:string;
+  scan_id:       string;
+  filename:      string;
+  demo_mode:     boolean;
+  total_ms:      number;
+  analyzed_at:   string;
+  warnings:      string[];
+  clinical_note: string;
   bbox: {
     model:      string;
     image_b64:  string;
@@ -60,8 +60,31 @@ export interface DualResult {
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  // ← change to your deployed backend URL
-  readonly BASE = 'http://localhost:8000/api/v1';
+  /**
+   * In development  → uses localhost:8000
+   * In production   → uses VITE_API_URL env var (set in Netlify/Vercel)
+   *                   fallback to window.location.origin (same-origin deploy)
+   *
+   * Set environment variable in your hosting platform:
+   *   VITE_API_URL = https://neuroscan-backend.onrender.com
+   */
+  readonly BASE: string = (() => {
+    // Angular uses import.meta.env for Vite, or environment.ts for @angular/cli
+    // Check both patterns:
+    const fromEnv =
+      (typeof (import.meta as any).env !== 'undefined' && (import.meta as any).env['VITE_API_URL']) ||
+      '';
+
+    if (fromEnv) return fromEnv.replace(/\/$/, '') + '/api/v1';
+
+    // Local dev
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8000/api/v1';
+    }
+
+    // Same-origin fallback (if frontend & backend on same domain)
+    return window.location.origin + '/api/v1';
+  })();
 
   constructor(private http: HttpClient) {}
 
