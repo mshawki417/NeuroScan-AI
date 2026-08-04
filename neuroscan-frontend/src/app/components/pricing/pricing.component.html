@@ -1,0 +1,46 @@
+<section class="pricing" id="pricing" aria-label="Pricing plans">
+  <div class="section-container">
+    <div class="pricing-header" data-aos="fade-up">
+      <span class="section-label">{{ 'pricing_label' | translate }}</span>
+      <h2 class="section-title">{{ 'pricing_title' | translate }}</h2>
+      <p class="section-subtitle">{{ 'pricing_subtitle' | translate }}</p>
+    </div>
+
+    <div *ngIf="plans.length === 0" class="placeholder-block" data-aos="fade-up">
+      <p>{{ 'pricing_coming_soon' | translate }}</p>
+    </div>
+
+    <ng-container *ngIf="plans.length > 0">
+      <div class="billing-toggle" data-aos="fade-up">
+        <span [class.active]="!isAnnual">{{ 'pricing_monthly' | translate }}</span>
+        <mat-slide-toggle [(ngModel)]="isAnnual" color="primary" aria-label="Toggle annual billing"></mat-slide-toggle>
+        <span [class.active]="isAnnual">{{ 'pricing_annual' | translate }}</span>
+        <span class="save-pill"><mat-icon>local_offer</mat-icon>{{ 'pricing_save' | translate }}</span>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan-card" *ngFor="let plan of plans; let i = index"
+             [class.plan-card--pro]="plan.highlighted"
+             [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="i * 120">
+          <div class="popular-badge" *ngIf="plan.badge"><mat-icon>star</mat-icon>{{ plan.badge }}</div>
+          <div class="plan-top">
+            <h3 class="plan-name">{{ plan.name }}</h3>
+            <p class="plan-desc">{{ plan.description }}</p>
+            <div class="plan-price">
+              <span class="price-curr">$</span>
+              <span class="price-amt">{{ currentPrice(plan) }}</span>
+              <span class="price-per">/mo</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li *ngFor="let f of plan.features" [class.excluded]="!f.included">
+              <mat-icon>{{ f.included ? 'check_circle' : 'cancel' }}</mat-icon>{{ f.text }}
+            </li>
+          </ul>
+          <button mat-raised-button class="plan-cta" [class.btn-gold]="plan.highlighted" [class.btn-teal]="!plan.highlighted">
+            {{ plan.cta }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>

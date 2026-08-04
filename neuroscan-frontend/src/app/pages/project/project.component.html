@@ -1,0 +1,152 @@
+<div class="page fade-up">
+  <div class="page-head">
+    <h2 class="page-title">Project Details</h2>
+    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Project Details</span></div>
+  </div>
+
+  <div class="proj-grid">
+
+    <!-- ── LEFT: About + Features ── -->
+    <div class="left-col">
+      <div class="card about-card">
+        <!-- Brain visual -->
+        <div class="brain-vis">
+          <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bg2" cx="50%" cy="50%" r="55%">
+                <stop offset="0%" stop-color="#0f2040"/>
+                <stop offset="100%" stop-color="#060d1b"/>
+              </radialGradient>
+            </defs>
+            <rect width="200" height="180" fill="url(#bg2)" rx="8"/>
+            <!-- Rings -->
+            <circle cx="100" cy="90" r="70" fill="none" stroke="rgba(59,142,240,.15)" stroke-width="1" stroke-dasharray="5 3"/>
+            <circle cx="100" cy="90" r="50" fill="none" stroke="rgba(34,211,238,.1)" stroke-width="1" stroke-dasharray="3 4"/>
+            <circle cx="100" cy="90" r="32" fill="none" stroke="rgba(59,142,240,.12)" stroke-width=".8"/>
+            <!-- Brain shape -->
+            <ellipse cx="100" cy="90" rx="42" ry="38" fill="rgba(13,24,48,.8)" stroke="#1e3a80" stroke-width="1.2"/>
+            <ellipse cx="100" cy="90" rx="32" ry="28" fill="rgba(10,18,36,.7)" stroke="rgba(59,142,240,.3)" stroke-width=".8"/>
+            <path d="M82 74 Q100 65 118 74 Q127 86 118 102 Q100 111 82 102 Q73 88 82 74" fill="rgba(16,30,62,.6)" stroke="#1e3070" stroke-width=".7"/>
+            <!-- Glow core -->
+            <circle cx="100" cy="90" r="8" fill="rgba(34,211,238,.15)"/>
+            <circle cx="100" cy="90" r="4" fill="#22d3ee" opacity=".7"/>
+            <!-- Orbit dots -->
+            <circle cx="100" cy="28" r="3" fill="#3b8ef0" opacity=".8"/>
+            <circle cx="162" cy="90" r="3" fill="#22d3ee" opacity=".6"/>
+            <circle cx="100" cy="152" r="3" fill="#3b8ef0" opacity=".6"/>
+            <circle cx="38"  cy="90" r="3" fill="#22d3ee" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="about-content">
+          <h3>About the Project</h3>
+          <p>NeuroScan AI is a deep learning based system designed to classify brain MRI scans into four categories: Glioma, Meningioma, Pituitary and No Tumor.</p>
+          <p>The system leverages state-of-the-art convolutional neural networks to deliver accurate, fast and reliable predictions to assist radiologists in clinical decision making.</p>
+          <div class="about-tags">
+            <span class="badge b-blue">Deep Learning</span>
+            <span class="badge b-cyan">Computer Vision</span>
+            <span class="badge b-green" style="margin-top:6px">Medical AI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card features-card">
+        <div class="sec-title">Key Features</div>
+        <div class="feat-grid">
+          @for (f of features; track f) {
+            <div class="feat-item">
+              <svg width="12" height="12" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>{{ f }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MIDDLE: Pipeline ── -->
+    <div class="card pipeline-card">
+      <div class="sec-title">Pipeline — 17 Stages</div>
+      <div class="pipeline-list">
+        @for (s of pipeline; track s.n) {
+          <div class="pipe-step" [class.last]="s.n === '17'">
+            <div class="pipe-num">{{ s.n }}</div>
+            <div class="pipe-connector" [class.hidden]="s.n === '17'"></div>
+            <div class="pipe-lbl">{{ s.l }}</div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Details ── -->
+    <div class="right-col">
+
+      <!-- Objective + Dataset -->
+      <div class="obj-row">
+        <div class="card obj-card">
+          <div class="obj-icon">🎯</div>
+          <div class="obj-title">Objective</div>
+          <p>Build an AI system for accurate classification of brain tumors using MRI scans.</p>
+        </div>
+        <div class="card obj-card">
+          <div class="obj-icon">📦</div>
+          <div class="obj-title">Dataset</div>
+          <p>Brain MRI dataset with four classes and multiple imaging modalities.</p>
+        </div>
+      </div>
+
+      <!-- Models -->
+      <div class="card">
+        <div class="sec-title">Models Used</div>
+        @for (m of models; track m.name) {
+          <div class="model-row">
+            <div class="model-dot" [style.background]="m.color" [style.box-shadow]="'0 0 7px '+m.color"></div>
+            <div class="model-info">
+              <div class="model-name">{{ m.name }}</div>
+              <div class="model-role">{{ m.role }}</div>
+            </div>
+            <div class="model-acc" [style.color]="m.color">{{ m.acc }}</div>
+          </div>
+        }
+      </div>
+
+      <!-- Technologies -->
+      <div class="card">
+        <div class="sec-title">Technologies</div>
+        <div class="tech-grid">
+          @for (t of tech; track t.name) {
+            <div class="tech-chip">
+              <span class="tech-icon">{{ t.icon }}</span>
+              <span class="tech-name" [style.color]="t.color">{{ t.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Strengths -->
+      <div class="card">
+        <div class="sec-title">Strengths</div>
+        @for (s of strengths; track s.t) {
+          <div class="str-item">
+            <svg width="12" height="12" fill="#22d3ee" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <div>
+              <div class="str-title">{{ s.t }}</div>
+              <div class="str-desc">{{ s.d }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Model Exports -->
+      <div class="card">
+        <div class="sec-title">Model Exports</div>
+        @for (e of exports; track e.fmt) {
+          <div class="exp-row">
+            <span class="badge b-cyan">{{ e.fmt }}</span>
+            <span class="exp-file">{{ e.file }}</span>
+            <span class="exp-size">{{ e.size }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

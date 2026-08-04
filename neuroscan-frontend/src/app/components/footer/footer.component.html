@@ -1,0 +1,60 @@
+<footer class="footer" id="footer" role="contentinfo">
+
+  <div class="footer-cta-strip">
+    <div class="section-container cta-inner">
+      <div class="cta-text" data-aos="fade-right">
+        <h2 class="cta-heading">{{ 'footer_cta_heading' | translate }}</h2>
+        <p class="cta-sub">{{ 'footer_cta_sub' | translate }}</p>
+      </div>
+      <div class="cta-actions" data-aos="fade-left">
+        <button mat-raised-button class="btn-gold cta-btn">
+          {{ 'footer_cta_btn' | translate }}
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <button mat-stroked-button class="cta-demo-btn">{{ 'footer_cta_demo' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-main">
+    <div class="section-container footer-grid">
+      <div class="footer-brand">
+        <a class="footer-logo" (click)="scrollTop()" role="button" tabindex="0" aria-label="Back to top">
+          <img src="assets/images/logo.png" alt="Easo-Manage" class="footer-logo-img" />
+          <span class="footer-logo-text">Easo<span class="footer-logo-accent">-Manage</span></span>
+        </a>
+        <p class="footer-tagline">{{ 'footer_tagline' | translate }}</p>
+        <div class="footer-socials">
+          <a *ngFor="let s of socials" [href]="s.href" [attr.aria-label]="s.label"
+             class="social-icon" target="_blank" rel="noopener noreferrer">
+            <mat-icon>{{ s.icon }}</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col" *ngFor="let col of columns">
+        <h4 class="footer-col-title">{{ col.titleKey | translate }}</h4>
+        <ul>
+          <li *ngFor="let link of col.links">
+            <a [href]="link.href" class="footer-link">{{ link.labelKey | translate }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="section-container bottom-inner">
+      <p class="copyright">&copy; {{ year }} {{ 'footer_copyright' | translate }}</p>
+      <div class="bottom-links">
+        <a href="#" class="bottom-link">{{ 'footer_bottom_privacy' | translate }}</a>
+        <a href="#" class="bottom-link">{{ 'footer_bottom_terms' | translate }}</a>
+        <a href="#" class="bottom-link">{{ 'footer_bottom_cookies' | translate }}</a>
+      </div>
+      <button mat-icon-button class="back-to-top" (click)="scrollTop()" aria-label="Back to top">
+        <mat-icon>keyboard_arrow_up</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</footer>

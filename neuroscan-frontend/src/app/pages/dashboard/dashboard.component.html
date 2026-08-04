@@ -1,0 +1,141 @@
+<div class="page fade-up">
+
+  <!-- ══ HERO ══ -->
+  <div class="hero">
+    <div class="hero-bg">
+      <!-- Simulated MRI background -->
+      <svg class="mri-bg-svg" viewBox="0 0 800 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hg1" cx="70%" cy="50%" r="45%">
+            <stop offset="0%" stop-color="#0a2040" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#060d1b" stop-opacity="1"/>
+          </radialGradient>
+          <radialGradient id="scan1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#102838"/>
+            <stop offset="60%" stop-color="#101828"/>
+            <stop offset="100%" stop-color="#080f1e"/>
+          </radialGradient>
+          <radialGradient id="hot1" cx="55%" cy="45%" r="25%" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stop-color="#ff3030" stop-opacity=".8"/>
+            <stop offset="50%" stop-color="#ff8800" stop-opacity=".5"/>
+            <stop offset="80%" stop-color="#ffff00" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="#0088ff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="340" fill="#060d1b"/>
+        <!-- Left MRI scan simulation -->
+        <ellipse cx="240" cy="170" rx="110" ry="100" fill="url(#scan1)" stroke="#1a3070" stroke-width="1"/>
+        <ellipse cx="240" cy="170" rx="85"  ry="78"  fill="#0d1830" stroke="#1e3a80" stroke-width=".8"/>
+        <ellipse cx="240" cy="170" rx="65"  ry="58"  fill="#111e3a"/>
+        <path d="M210 130 Q240 118 270 130 Q285 155 270 185 Q240 198 210 185 Q195 160 210 130" fill="#131e3c" stroke="#1e3060" stroke-width=".8"/>
+        <path d="M228 125 Q240 120 252 125" stroke="#1d3a7a" stroke-width="1.2" fill="none"/>
+        <path d="M196 158 Q205 150 214 158" stroke="#1d3a7a" stroke-width="1" fill="none"/>
+        <path d="M266 158 Q275 150 284 158" stroke="#1d3a7a" stroke-width="1" fill="none"/>
+        <path d="M224 145 Q240 138 256 145 Q264 160 256 176 Q240 183 224 176 Q216 161 224 145" fill="#151e40"/>
+        <!-- Right MRI scan with heat map (Grad-CAM) -->
+        <ellipse cx="560" cy="170" rx="110" ry="100" fill="url(#scan1)" stroke="#1a3070" stroke-width="1"/>
+        <ellipse cx="560" cy="170" rx="85"  ry="78"  fill="#0d1830" stroke="#1e3a80" stroke-width=".8"/>
+        <ellipse cx="560" cy="170" rx="65"  ry="58"  fill="#111e3a"/>
+        <path d="M528 130 Q560 118 592 130 Q607 155 592 185 Q560 198 528 185 Q513 160 528 130" fill="#131e3c" stroke="#1e3060" stroke-width=".8"/>
+        <path d="M546 125 Q560 120 574 125" stroke="#1d3a7a" stroke-width="1.2" fill="none"/>
+        <!-- Heat map overlay -->
+        <ellipse cx="560" cy="170" rx="85" ry="78" fill="url(#hot1)"/>
+        <!-- Monitor frame suggestion -->
+        <rect x="140" y="50" width="520" height="240" rx="8" fill="none" stroke="#1e3060" stroke-width=".5" opacity=".4"/>
+        <!-- overlay gradient -->
+        <rect width="800" height="340" fill="url(#hg1)" opacity=".6"/>
+      </svg>
+    </div>
+
+    <div class="hero-left">
+      <h1>Brain MRI<br><span class="accent">Tumor Classification</span></h1>
+      <p>Advanced deep learning models for accurate and reliable brain tumor detection and classification.</p>
+      <div class="hero-btns">
+        <a routerLink="/upload" class="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload MRI Scan
+        </a>
+        <a routerLink="/analysis" class="btn btn-ghost">View Analysis</a>
+      </div>
+    </div>
+
+    <div class="ai-badge-card">
+      <div class="ai-badge-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="20" fill="rgba(29,111,220,.15)" stroke="var(--primary-lt)" stroke-width="1.2"/>
+          <circle cx="22" cy="22" r="13" fill="rgba(29,111,220,.1)" stroke="var(--primary-lt)" stroke-width=".8"/>
+          <circle cx="22" cy="22" r="6"  fill="var(--accent-lt)" opacity=".8"/>
+          <path d="M22 8 Q27 16 22 22 Q17 28 22 36" stroke="var(--accent-lt)" stroke-width="1.4" fill="none"/>
+          <path d="M8 22 Q16 17 22 22 Q28 27 36 22" stroke="var(--primary-lt)" stroke-width="1.2" fill="none" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="ai-badge-text">AI-Powered<br>Neuro Imaging</div>
+      <div class="ai-badge-sub">Accurate · Fast · Reliable</div>
+    </div>
+  </div>
+
+  <!-- ══ STATS ══ -->
+  <div class="stats-row">
+    @for (s of stats; track s.label) {
+      <div class="stat-card card">
+        <div class="stat-top">
+          <div class="stat-icon-wrap">
+            @if (s.icon === 'scan') {
+              <svg width="17" height="17" fill="none" stroke="var(--primary-lt)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            }
+            @if (s.icon === 'ai') {
+              <svg width="17" height="17" fill="none" stroke="var(--accent-lt)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            }
+            @if (s.icon === 'acc') {
+              <svg width="17" height="17" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            }
+            @if (s.icon === 'model') {
+              <svg width="17" height="17" fill="none" stroke="#eab308" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            }
+          </div>
+        </div>
+        <div class="stat-val">{{ s.value }}</div>
+        <div class="stat-lbl">{{ s.label }}</div>
+        @if (s.pos) {
+          <div class="stat-change pos">↑ {{ s.change }}</div>
+        } @else {
+          <div class="stat-change neutral">{{ s.change }}</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ══ BOTTOM ROW ══ -->
+  <div class="bottom-row">
+    <!-- Recent Analyses -->
+    <div class="card analyses-card">
+      <div class="tbl-header">
+        <span class="sec-title" style="margin:0">Recent Analyses</span>
+        <a routerLink="/analysis" class="view-all">View All</a>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>ID</th><th>Patient / Scan</th><th>Prediction</th><th>Confidence</th><th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.id) {
+            <tr>
+              <td class="mono">{{ r.id }}</td>
+              <td>{{ r.scan }}</td>
+              <td><span class="badge" [class]="r.cls">{{ r.pred }}</span></td>
+              <td>
+                <div class="conf-wrap">
+                  <div class="conf-track"><div class="conf-fill" [style.width.%]="r.conf"></div></div>
+                  <span>{{ r.conf }}%</span>
+                </div>
+              </td>
+              <td class="dt">{{ r.date }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

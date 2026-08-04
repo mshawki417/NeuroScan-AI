@@ -1,0 +1,12 @@
+<section class="trusted" id="trusted-by" aria-label="Trusted by companies">
+  <div class="section-container">
+    <p class="trusted-label" data-aos="fade-up">{{ 'trusted_label' | translate }}</p>
+    <div class="logos-row">
+      <div class="logo-item" *ngFor="let c of companies; let i = index"
+           [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="i * 70">
+        <div class="logo-badge">{{ c.abbr }}</div>
+        <span class="logo-name">{{ c.name }}</span>
+      </div>
+    </div>
+  </div>
+</section>
