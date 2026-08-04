@@ -1,11 +1,50 @@
 <div class="page fade-up">
 
   <!-- ══ HERO ══ -->
-  <div class="hero" style="position: relative; overflow: hidden; border-radius: 1rem;">
-    <div class="hero-bg" style="position: absolute; inset: 0; z-index: -1;">
-      <img src="assets/images/dashboard-banner.png" alt="Medical Banner" style="width: 100%; height: 100%; object-fit: cover;">
-      <!-- Overlay to make text readable -->
-      <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(11, 27, 61, 0.95) 0%, rgba(11, 27, 61, 0.4) 60%, rgba(11, 27, 61, 0.1) 100%);"></div>
+  <div class="hero">
+    <div class="hero-bg">
+      <!-- Simulated MRI background -->
+      <svg class="mri-bg-svg" viewBox="0 0 800 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hg1" cx="70%" cy="50%" r="45%">
+            <stop offset="0%" stop-color="#1a3060" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#060d1b" stop-opacity="1"/>
+          </radialGradient>
+          <radialGradient id="scan1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#243060"/>
+            <stop offset="60%" stop-color="#101828"/>
+            <stop offset="100%" stop-color="#080f1e"/>
+          </radialGradient>
+          <radialGradient id="hot1" cx="55%" cy="45%" r="25%" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stop-color="#ff3030" stop-opacity=".8"/>
+            <stop offset="50%" stop-color="#ff8800" stop-opacity=".5"/>
+            <stop offset="80%" stop-color="#ffff00" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="#0088ff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="340" fill="#060d1b"/>
+        <!-- Left MRI scan simulation -->
+        <ellipse cx="240" cy="170" rx="110" ry="100" fill="url(#scan1)" stroke="#1a3070" stroke-width="1"/>
+        <ellipse cx="240" cy="170" rx="85"  ry="78"  fill="#0d1830" stroke="#1e3a80" stroke-width=".8"/>
+        <ellipse cx="240" cy="170" rx="65"  ry="58"  fill="#111e3a"/>
+        <path d="M210 130 Q240 118 270 130 Q285 155 270 185 Q240 198 210 185 Q195 160 210 130" fill="#131e3c" stroke="#1e3060" stroke-width=".8"/>
+        <path d="M228 125 Q240 120 252 125" stroke="#1d3a7a" stroke-width="1.2" fill="none"/>
+        <path d="M196 158 Q205 150 214 158" stroke="#1d3a7a" stroke-width="1" fill="none"/>
+        <path d="M266 158 Q275 150 284 158" stroke="#1d3a7a" stroke-width="1" fill="none"/>
+        <path d="M224 145 Q240 138 256 145 Q264 160 256 176 Q240 183 224 176 Q216 161 224 145" fill="#151e40"/>
+        <!-- Right MRI scan with heat map (Grad-CAM) -->
+        <ellipse cx="560" cy="170" rx="110" ry="100" fill="url(#scan1)" stroke="#1a3070" stroke-width="1"/>
+        <ellipse cx="560" cy="170" rx="85"  ry="78"  fill="#0d1830" stroke="#1e3a80" stroke-width=".8"/>
+        <ellipse cx="560" cy="170" rx="65"  ry="58"  fill="#111e3a"/>
+        <path d="M528 130 Q560 118 592 130 Q607 155 592 185 Q560 198 528 185 Q513 160 528 130" fill="#131e3c" stroke="#1e3060" stroke-width=".8"/>
+        <path d="M546 125 Q560 120 574 125" stroke="#1d3a7a" stroke-width="1.2" fill="none"/>
+        <!-- Heat map overlay -->
+        <ellipse cx="560" cy="170" rx="85" ry="78" fill="url(#hot1)"/>
+        <!-- Monitor frame suggestion -->
+        <rect x="140" y="50" width="520" height="240" rx="8" fill="none" stroke="#1e3060" stroke-width=".5" opacity=".4"/>
+        <!-- overlay gradient -->
+        <rect width="800" height="340" fill="url(#hg1)" opacity=".6"/>
+      </svg>
     </div>
 
     <div class="hero-left">

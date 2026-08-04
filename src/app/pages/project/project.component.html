@@ -1,177 +1,152 @@
-<div class="flex-1 overflow-y-auto bg-slate-50 relative h-full">
-  <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-10">
-    <div>
-      <h1 class="text-4xl font-bold text-slate-800">Project Details</h1>
-      <div class="flex items-center text-base text-slate-500 mt-1 space-x-2">
-        <a class="hover:text-blue-600 transition-colors" routerLink="/dashboard">Home</a>
-        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-        <span class="text-slate-700">Project Details</span>
+<div class="page fade-up">
+  <div class="page-head">
+    <h2 class="page-title">Project Details</h2>
+    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Project Details</span></div>
+  </div>
+
+  <div class="proj-grid">
+
+    <!-- ── LEFT: About + Features ── -->
+    <div class="left-col">
+      <div class="card about-card">
+        <!-- Brain visual -->
+        <div class="brain-vis">
+          <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bg2" cx="50%" cy="50%" r="55%">
+                <stop offset="0%" stop-color="#0f2040"/>
+                <stop offset="100%" stop-color="#060d1b"/>
+              </radialGradient>
+            </defs>
+            <rect width="200" height="180" fill="url(#bg2)" rx="8"/>
+            <!-- Rings -->
+            <circle cx="100" cy="90" r="70" fill="none" stroke="rgba(59,142,240,.15)" stroke-width="1" stroke-dasharray="5 3"/>
+            <circle cx="100" cy="90" r="50" fill="none" stroke="rgba(34,211,238,.1)" stroke-width="1" stroke-dasharray="3 4"/>
+            <circle cx="100" cy="90" r="32" fill="none" stroke="rgba(59,142,240,.12)" stroke-width=".8"/>
+            <!-- Brain shape -->
+            <ellipse cx="100" cy="90" rx="42" ry="38" fill="rgba(13,24,48,.8)" stroke="#1e3a80" stroke-width="1.2"/>
+            <ellipse cx="100" cy="90" rx="32" ry="28" fill="rgba(10,18,36,.7)" stroke="rgba(59,142,240,.3)" stroke-width=".8"/>
+            <path d="M82 74 Q100 65 118 74 Q127 86 118 102 Q100 111 82 102 Q73 88 82 74" fill="rgba(16,30,62,.6)" stroke="#1e3070" stroke-width=".7"/>
+            <!-- Glow core -->
+            <circle cx="100" cy="90" r="8" fill="rgba(34,211,238,.15)"/>
+            <circle cx="100" cy="90" r="4" fill="#22d3ee" opacity=".7"/>
+            <!-- Orbit dots -->
+            <circle cx="100" cy="28" r="3" fill="#3b8ef0" opacity=".8"/>
+            <circle cx="162" cy="90" r="3" fill="#22d3ee" opacity=".6"/>
+            <circle cx="100" cy="152" r="3" fill="#3b8ef0" opacity=".6"/>
+            <circle cx="38"  cy="90" r="3" fill="#22d3ee" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="about-content">
+          <h3>About the Project</h3>
+          <p>NeuroScan AI is a deep learning based system designed to classify brain MRI scans into four categories: Glioma, Meningioma, Pituitary and No Tumor.</p>
+          <p>The system leverages state-of-the-art convolutional neural networks to deliver accurate, fast and reliable predictions to assist radiologists in clinical decision making.</p>
+          <div class="about-tags">
+            <span class="badge b-blue">Deep Learning</span>
+            <span class="badge b-cyan">Computer Vision</span>
+            <span class="badge b-green" style="margin-top:6px">Medical AI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card features-card">
+        <div class="sec-title">Key Features</div>
+        <div class="feat-grid">
+          @for (f of features; track f) {
+            <div class="feat-item">
+              <svg width="12" height="12" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>{{ f }}</span>
+            </div>
+          }
+        </div>
       </div>
     </div>
-  </header>
 
-  <main class="p-6">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="space-y-6">
-        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h2 class="text-2xl font-bold text-slate-800 mb-4">About the Project</h2>
-          <div class="space-y-4 text-base text-slate-600 leading-relaxed">
-            <p>
-              This project aims to develop and evaluate deep learning models for automatic classification of medical imaging scans (Brain MRI).
-            </p>
-            <p>
-              The system provides accurate predictions along with model explainability (Grad-CAM) and comprehensive performance evaluation.
-            </p>
+    <!-- ── MIDDLE: Pipeline ── -->
+    <div class="card pipeline-card">
+      <div class="sec-title">Pipeline — 17 Stages</div>
+      <div class="pipeline-list">
+        @for (s of pipeline; track s.n) {
+          <div class="pipe-step" [class.last]="s.n === '17'">
+            <div class="pipe-num">{{ s.n }}</div>
+            <div class="pipe-connector" [class.hidden]="s.n === '17'"></div>
+            <div class="pipe-lbl">{{ s.l }}</div>
           </div>
-        </section>
-        
-        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h2 class="text-2xl font-bold text-slate-800 mb-4">Dataset</h2>
-          <div class="space-y-4">
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center text-slate-600">
-                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
-                  <i class="fa-solid fa-users"></i>
-                </div>
-                <span class="font-medium text-base">Training Images</span>
-              </div>
-              <span class="font-bold text-slate-800 text-base">5,712</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center text-slate-600">
-                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
-                  <i class="fa-solid fa-file-import"></i>
-                </div>
-                <span class="font-medium text-base">Testing Images</span>
-              </div>
-              <span class="font-bold text-slate-800 text-base">1,311</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center text-slate-600">
-                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
-                  <i class="fa-solid fa-tags"></i>
-                </div>
-                <span class="font-medium text-base">Classes</span>
-              </div>
-              <span class="font-bold text-slate-800 text-base">4 (Glioma, Meningioma, Pituitary, No Tumor)</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center text-slate-600">
-                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3">
-                  <i class="fa-regular fa-image"></i>
-                </div>
-                <span class="font-medium text-base">Image Size</span>
-              </div>
-              <span class="font-bold text-slate-800 text-base">224 x 224</span>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="space-y-6">
-        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <h2 class="text-2xl font-bold text-slate-800 mb-6">Project Pipeline</h2>
-          <div class="relative pl-4 border-l-2 border-slate-100 space-y-8">
-            <div class="relative">
-              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
-                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
-              </div>
-              <div class="pl-4">
-                <h3 class="text-base font-bold text-slate-800">Data Collection &amp; Preprocessing</h3>
-              </div>
-            </div>
-            <div class="relative">
-              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
-                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
-              </div>
-              <div class="pl-4">
-                <h3 class="text-base font-bold text-slate-800">Model Training</h3>
-                <p class="text-sm text-slate-500 mt-1">EfficientNet-B4, ConvNeXt-Tiny, ResNet-50</p>
-              </div>
-            </div>
-            <div class="relative">
-              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
-                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
-              </div>
-              <div class="pl-4">
-                <h3 class="text-base font-bold text-slate-800">Model Evaluation</h3>
-                <p class="text-sm text-slate-500 mt-1">Accuracy, Precision, Recall, F1, MCC, Kappa</p>
-              </div>
-            </div>
-            <div class="relative">
-              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
-                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
-              </div>
-              <div class="pl-4">
-                <h3 class="text-base font-bold text-slate-800">Explainability</h3>
-                <p class="text-sm text-slate-500 mt-1">Grad-CAM, Grad-CAM++, LayerCAM</p>
-              </div>
-            </div>
-            <div class="relative">
-              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
-                <i class="fa-solid fa-check text-[10px] text-blue-600"></i>
-              </div>
-              <div class="pl-4">
-                <h3 class="text-base font-bold text-slate-800">Export &amp; Deployment</h3>
-                <p class="text-sm text-slate-500 mt-1">ONNX, TorchScript</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="col-span-1 lg:col-span-2 space-y-6">
-        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm overflow-x-auto">
-          <h2 class="text-2xl font-bold text-slate-800 mb-4">Models Summary</h2>
-          <table class="w-full text-left border-collapse min-w-[700px] text-base">
-            <thead>
-              <tr class="border-b border-slate-200 text-xs text-slate-500 font-medium uppercase tracking-wider">
-                <th class="py-3 px-4 font-semibold">Model</th>
-                <th class="py-3 px-4 font-semibold">Best Accuracy</th>
-                <th class="py-3 px-4 font-semibold">Status</th>
-              </tr>
-            </thead>
-            <tbody class="text-base text-slate-700 divide-y divide-slate-100">
-              @for (mod of models; track mod.name) {
-                <tr class="hover:bg-slate-50/50 transition-colors">
-                  <td class="py-4 px-4 font-bold text-slate-800">{{ mod.name }}</td>
-                  <td class="py-4 px-4">{{ mod.acc }}</td>
-                  <td class="py-4 px-4">
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
-                          [class.bg-emerald-100]="mod.role === 'Best Performer'"
-                          [class.text-emerald-700]="mod.role === 'Best Performer'"
-                          [class.bg-blue-100]="mod.role === 'Primary Model'"
-                          [class.text-blue-700]="mod.role === 'Primary Model'"
-                          [class.bg-slate-100]="mod.role === 'Baseline'"
-                          [class.text-slate-700]="mod.role === 'Baseline'">
-                      {{ mod.role }}
-                    </span>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </section>
-        
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Confusion Matrix (EfficientNet-B4)</h2>
-            <img src="assets/images/confusion_matrix_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="Confusion Matrix">
-          </div>
-          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">ROC Curves (EfficientNet-B4)</h2>
-            <img src="assets/images/roc_curves_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="ROC Curves">
-          </div>
-          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Training Curves (EfficientNet-B4)</h2>
-            <img src="assets/images/training_curves_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="Training Curves">
-          </div>
-          <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 self-start">Grad-CAM Visualizations</h2>
-            <img src="assets/images/gradcam_gradcam_primary_efficientnet_b4.png" class="max-w-full h-auto rounded-lg shadow-sm" alt="GradCAM">
-          </div>
-        </section>
+        }
       </div>
     </div>
-  </main>
+
+    <!-- ── RIGHT: Details ── -->
+    <div class="right-col">
+
+      <!-- Objective + Dataset -->
+      <div class="obj-row">
+        <div class="card obj-card">
+          <div class="obj-icon">🎯</div>
+          <div class="obj-title">Objective</div>
+          <p>Build an AI system for accurate classification of brain tumors using MRI scans.</p>
+        </div>
+        <div class="card obj-card">
+          <div class="obj-icon">📦</div>
+          <div class="obj-title">Dataset</div>
+          <p>Brain MRI dataset with four classes and multiple imaging modalities.</p>
+        </div>
+      </div>
+
+      <!-- Models -->
+      <div class="card">
+        <div class="sec-title">Models Used</div>
+        @for (m of models; track m.name) {
+          <div class="model-row">
+            <div class="model-dot" [style.background]="m.color" [style.box-shadow]="'0 0 7px '+m.color"></div>
+            <div class="model-info">
+              <div class="model-name">{{ m.name }}</div>
+              <div class="model-role">{{ m.role }}</div>
+            </div>
+            <div class="model-acc" [style.color]="m.color">{{ m.acc }}</div>
+          </div>
+        }
+      </div>
+
+      <!-- Technologies -->
+      <div class="card">
+        <div class="sec-title">Technologies</div>
+        <div class="tech-grid">
+          @for (t of tech; track t.name) {
+            <div class="tech-chip">
+              <span class="tech-icon">{{ t.icon }}</span>
+              <span class="tech-name" [style.color]="t.color">{{ t.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Strengths -->
+      <div class="card">
+        <div class="sec-title">Strengths</div>
+        @for (s of strengths; track s.t) {
+          <div class="str-item">
+            <svg width="12" height="12" fill="#22d3ee" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <div>
+              <div class="str-title">{{ s.t }}</div>
+              <div class="str-desc">{{ s.d }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Model Exports -->
+      <div class="card">
+        <div class="sec-title">Model Exports</div>
+        @for (e of exports; track e.fmt) {
+          <div class="exp-row">
+            <span class="badge b-cyan">{{ e.fmt }}</span>
+            <span class="exp-file">{{ e.file }}</span>
+            <span class="exp-size">{{ e.size }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
 </div>
