@@ -1,134 +1,71 @@
 """
-PyTorch model manager — loads timm models from .pt checkpoints.
-Used for Grad-CAM visualisation (gradients not available in ONNX).
-
-Supports two filename styles automatically:
-  - Render:    model/efficientnet_b4_model   (no extension)
-  - Local dev: model/efficientnet_b4.pt      (with .pt extension)
+Model Manager — loads and caches ONNX models.
+Supports both ConvNeXt-Tiny and EfficientNet-B4.
 """
-from __future__ import annotations
+import time
 import logging
 from pathlib import Path
 from typing import Dict, Optional
-
-import torch
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
-# Architecture registry (timm model names)
-ARCH_MAP = {
-    "efficientnet_b4": "efficientnet_b4",
-    "convnext_tiny":   "convnext_tiny",
-}
-
-# Model file stems on Render (no extension)
-_RENDER_STEMS = {
-    "efficientnet_b4": "efficientnet_b4_model",
-    "convnext_tiny":   "convnext_tiny_model",
-}
-
-# Model file stems for local dev (with .pt)
-_LOCAL_STEMS = {
-    "efficientnet_b4": "efficientnet_b4",
-    "convnext_tiny":   "convnext_tiny",
-}
+# Try importing onnxruntime
+try:
+    import onnxruntime as ort
+    ORT_AVAILABLE = True
+except ImportError:
+    ORT_AVAILABLE = False
+    logger.warning("onnxruntime not installed — running in DEMO mode")
 
 
-def _resolve_ckpt(key: str) -> Optional[Path]:
-    """
-    Return the checkpoint Path that actually exists on disk.
-    Tries Render-style (no extension) first, then local .pt style.
-    Returns None if neither exists.
-    """
-    base = Path("model")
+class ModelManager:
+    """Singleton model manager with lazy loading."""
 
-    render_path = base / _RENDER_STEMS[key]         # e.g. model/efficientnet_b4_model
-    local_path  = base / f"{_LOCAL_STEMS[key]}.pt"  # e.g. model/efficientnet_b4.pt
+    _sessions: Dict[str, any] = {}
+    _load_times: Dict[str, float] = {}
 
-    if render_path.exists():
-        return render_path
-    if local_path.exists():
-        return local_path
-    return None
+    @classmethod
+    def load(cls, model_key: str, model_path: Path) -> Optional[any]:
+        """Load model into session cache."""
+        if model_key in cls._sessions:
+            return cls._sessions[model_key]
 
+        if not ORT_AVAILABLE:
+            logger.info(f"DEMO mode: skipping load of {model_key}")
+            return None
 
-# Pre-build CKPT_PATHS at import time (used by routes.py)
-CKPT_PATHS: Dict[str, Path] = {
-    key: Path("model") / _RENDER_STEMS[key]   # default; actual resolution happens in load_torch_model
-    for key in ARCH_MAP
-}
+        if not model_path.exists():
+            raise FileNotFoundError(
+                f"Model file not found: {model_path}\n"
+                f"Place your ONNX model at: {model_path}"
+            )
 
-_models: Dict[str, torch.nn.Module] = {}
-NUM_CLASSES = 4
+        logger.info(f"Loading model: {model_key} from {model_path}")
+        t0 = time.time()
 
-
-def load_torch_model(key: str) -> Optional[torch.nn.Module]:
-    """Load timm model from checkpoint. Returns None if file not found."""
-    if key in _models:
-        return _models[key]
-
-    try:
-        import timm
-    except ImportError:
-        logger.error("timm not installed — pip install timm")
-        return None
-
-    arch = ARCH_MAP.get(key)
-    if arch is None:
-        logger.error(f"Unknown model key: {key}")
-        return None
-
-    ckpt_path = _resolve_ckpt(key)
-    if ckpt_path is None:
-        logger.warning(
-            f"PyTorch checkpoint not found for '{key}'.\n"
-            f"  Tried: model/{_RENDER_STEMS[key]}  (Render style)\n"
-            f"  Tried: model/{_LOCAL_STEMS[key]}.pt (local style)\n"
-            f"  GradCAM will fall back to demo mode."
-        )
-        return None
-
-    logger.info(f"Loading PyTorch model [{key}] from {ckpt_path}")
-
-    model = timm.create_model(arch, pretrained=False, num_classes=NUM_CLASSES)
-
-    ckpt = torch.load(str(ckpt_path), map_location="cpu", weights_only=False)
-
-    # Support different checkpoint formats
-    state_dict = (
-        ckpt.get("model_state_dict") or
-        ckpt.get("state_dict") or
-        ckpt.get("model") or
-        ckpt  # bare state dict
-    )
-
-    # Strip 'module.' prefix (DataParallel)
-    state_dict = {k.replace("module.", ""): v for k, v in state_dict.items()}
-
-    missing, unexpected = model.load_state_dict(state_dict, strict=False)
-    if missing:
-        logger.warning(f"Missing keys ({len(missing)}): {missing[:5]}")
-    if unexpected:
-        logger.warning(f"Unexpected keys ({len(unexpected)}): {unexpected[:5]}")
-
-    model.eval()
-    _models[key] = model
-    logger.info(f"✓ Loaded [{key}] from {ckpt_path}")
-    return model
-
-
-def get_torch_model(key: str) -> Optional[torch.nn.Module]:
-    return _models.get(key)
-
-
-def loaded_torch_models() -> list:
-    return list(_models.keys())
-
-
-def preload_all():
-    """Called at startup to load all available checkpoints."""
-    for key in ARCH_MAP:
+        providers = ["CPUExecutionProvider"]
         try:
-            load_torch_model(key)
-        except Exception as e:
-            logger.warning(f"Could not load {key}: {e}")
+            from onnxruntime import get_available_providers
+            if "CUDAExecutionProvider" in get_available_providers():
+                providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        except Exception:
+            pass
+
+        session = ort.InferenceSession(str(model_path), providers=providers)
+        cls._sessions[model_key] = session
+        cls._load_times[model_key] = round(time.time() - t0, 2)
+        logger.info(f"Loaded {model_key} in {cls._load_times[model_key]}s")
+        return session
+
+    @classmethod
+    def get(cls, model_key: str) -> Optional[any]:
+        return cls._sessions.get(model_key)
+
+    @classmethod
+    def loaded_models(cls) -> list:
+        return list(cls._sessions.keys())
+
+    @classmethod
+    def load_times(cls) -> Dict[str, float]:
+        return cls._load_times
