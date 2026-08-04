@@ -1,23 +1,23 @@
 # Web framework
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-python-multipart==0.0.12
+fastapi
+uvicorn[standard]
+python-multipart
 
 # ONNX inference (fast, no PyTorch needed for /predict)
-onnxruntime==1.19.2
+onnxruntime
 
 # PyTorch + timm (needed for /predict/dual — GradCAM visualisation)
 # Install CPU-only version to keep image small:
 #   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-torch>=2.1.0
-torchvision>=0.16.0
-timm>=1.0.0
+torch
+torchvision
+timm
 
 # Image processing
-Pillow==10.4.0
-numpy==1.26.4
-opencv-python-headless==4.10.0.84
+Pillow
+numpy
+opencv-python-headless
 
 # Utils
-python-dotenv==1.0.1
-pydantic==2.9.2
+python-dotenv
+pydantic
