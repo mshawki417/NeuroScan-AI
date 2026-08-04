@@ -20,7 +20,7 @@
   td { padding: 9px 10px; text-align: center; border: 1px solid var(--border); font-weight: 600; }
 }
 .cm-cell {
-  &.hi { background: rgba(34,211,238,.18); color: var(--cyan); }
+  &.hi { background: rgba(34,211,238,.18); color: var(--accent-lt); }
   &.md { background: rgba(239,68,68,.12);  color: var(--red);  }
   &.lo { background: rgba(255,255,255,.02); color: var(--text-dim); }
 }

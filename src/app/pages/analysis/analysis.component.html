@@ -28,7 +28,7 @@
 
       <!-- Model badge -->
       <div class="model-badge">
-        <div class="mb-dot" style="background:#3b8ef0;box-shadow:0 0 7px #3b8ef0"></div>
+        <div class="mb-dot" style="background:var(--primary-lt);box-shadow:0 0 7px var(--primary-lt)"></div>
         <div>
           <div class="mb-name">EfficientNet-B4</div>
           <div class="mb-role">Bounding Box Detection</div>
@@ -41,7 +41,7 @@
         @if (bboxSrc()) {
           <img [src]="bboxSrc()" class="output-img" alt="EfficientNet BBox"/>
           <div class="img-overlay-label bbox-label">
-            <svg width="12" height="12" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
             Bounding Box
           </div>
         } @else {
@@ -55,16 +55,16 @@
                 <path d="M106 100 Q150 80 194 100 Q218 130 194 168 Q150 188 106 168 Q82 138 106 100" fill="#0d1428" stroke="#162040" stroke-width="1"/>
                 <ellipse cx="175" cy="118" rx="28" ry="22" fill="#111e3c" stroke="#1e3060" stroke-width=".8"/>
                 <!-- Bounding box -->
-                <rect x="148" y="95" width="56" height="46" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+                <rect x="148" y="95" width="56" height="46" fill="none" stroke="var(--green)" stroke-width="2.5"/>
                 <!-- Corner accents -->
-                <polyline points="148,95 148,107" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="148,95 160,95" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="204,95 192,95" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="204,95 204,107" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="148,141 148,129" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="148,141 160,141" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="204,141 192,141" stroke="#22c55e" stroke-width="3.5" fill="none"/>
-                <polyline points="204,141 204,129" stroke="#22c55e" stroke-width="3.5" fill="none"/>
+                <polyline points="148,95 148,107" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="148,95 160,95" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="204,95 192,95" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="204,95 204,107" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="148,141 148,129" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="148,141 160,141" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="204,141 192,141" stroke="var(--green)" stroke-width="3.5" fill="none"/>
+                <polyline points="204,141 204,129" stroke="var(--green)" stroke-width="3.5" fill="none"/>
                 <!-- Label -->
                 <rect x="148" y="80" width="84" height="16" rx="3" fill="#22c55e"/>
                 <text x="190" y="92" text-anchor="middle" fill="#000" font-size="9" font-weight="700">Tumor Region</text>
@@ -123,12 +123,12 @@
     <div class="model-panel card">
 
       <div class="model-badge">
-        <div class="mb-dot" style="background:#22d3ee;box-shadow:0 0 7px #22d3ee"></div>
+        <div class="mb-dot" style="background:var(--accent-lt);box-shadow:0 0 7px var(--accent-lt)"></div>
         <div>
           <div class="mb-name">ConvNeXt-Tiny</div>
           <div class="mb-role">GradCAM Heatmap</div>
         </div>
-        <div class="mb-acc" style="color:#22d3ee">95.69%</div>
+        <div class="mb-acc" style="color:var(--accent-lt)">95.69%</div>
       </div>
 
       <div class="output-img-wrap">
@@ -239,7 +239,7 @@
       <div class="info-lbl">Explainability Method</div>
     </div>
     <div class="card disclaimer-card">
-      <svg width="14" height="14" fill="none" stroke="#3b8ef0" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg width="14" height="14" fill="none" stroke="var(--primary-lt)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>AI analysis is for decision support only. Always confirm with a radiologist before clinical decision-making.</span>
     </div>
     <a routerLink="/upload" class="btn btn-primary new-scan-btn">
