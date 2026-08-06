@@ -21,3 +21,4 @@ opencv-python-headless
 # Utils
 python-dotenv
 pydantic
+requests

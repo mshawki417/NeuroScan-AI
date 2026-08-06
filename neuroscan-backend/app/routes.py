@@ -2,9 +2,11 @@
 FastAPI route definitions.
 """
 import time
+import uuid
 import logging
 from pathlib import Path
 from typing import Optional
+from datetime import datetime
 
 from fastapi import APIRouter, File, UploadFile, HTTPException, Query
 from fastapi.responses import JSONResponse
@@ -153,3 +155,171 @@ def get_stats():
             }
         }
     }
+
+
+# ─── Dual Predict (GradCAM — BBox + Heatmap) ────────────────────────────────
+
+@router.post("/predict/dual", tags=["Inference"])
+async def predict_dual(
+    file: UploadFile = File(..., description="MRI scan image (JPG/PNG/DCM)"),
+):
+    """
+    Run BOTH models on the uploaded MRI scan using GradCAM:
+    - EfficientNet-B4 → Bounding Box overlay
+    - ConvNeXt-Tiny   → GradCAM Heatmap overlay
+
+    Returns base64-encoded images + predictions for both models.
+    Falls back to demo mode if PyTorch models are not loaded.
+    """
+    # Validate extension
+    ext = Path(file.filename or "").suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS and ext != "":
+        raise HTTPException(400, f"Unsupported file type: {ext}. Allowed: {ALLOWED_EXTENSIONS}")
+
+    # Read & size-check
+    contents = await file.read()
+    mb = len(contents) / (1024 * 1024)
+    if mb > MAX_FILE_SIZE_MB:
+        raise HTTPException(413, f"File too large ({mb:.1f} MB). Max: {MAX_FILE_SIZE_MB} MB")
+
+    scan_id = f"MR-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:6].upper()}"
+    t_start = time.time()
+    warnings = []
+
+    # ── Try GradCAM (PyTorch models) ─────────────────────────────────────────
+    demo_mode = False
+    bbox_out  = None
+    heat_out  = None
+
+    try:
+        from app.torch_model_manager import load_torch_model
+        from gradcam import generate_dual_output
+
+        model_bbox = load_torch_model("efficientnet_b4")
+        model_heat = load_torch_model("convnext_tiny")
+
+        if model_bbox is not None and model_heat is not None:
+            dual = generate_dual_output(contents, model_bbox, model_heat)
+            bbox_out = dual
+            heat_out = dual
+        else:
+            demo_mode = True
+            warnings.append("PyTorch models not loaded — running in demo mode")
+    except Exception as e:
+        logger.warning(f"GradCAM failed, falling back to demo: {e}")
+        demo_mode = True
+        warnings.append(f"GradCAM unavailable — demo mode active")
+
+    # ── Demo mode: use ONNX inference for predictions, no images ─────────────
+    if demo_mode:
+        try:
+            bbox_result = run_inference(contents, file.filename or "scan.jpg", model_key="efficientnet_b4")
+            heat_result = run_inference(contents, file.filename or "scan.jpg", model_key="convnext_tiny")
+        except Exception:
+            import random
+            # Pure demo — both models offline
+            bbox_result = _demo_result("EfficientNet-B4")
+            heat_result = _demo_result("ConvNeXt-Tiny")
+
+        return JSONResponse(content={
+            "scan_id":       scan_id,
+            "filename":      file.filename,
+            "demo_mode":     True,
+            "total_ms":      round((time.time() - t_start) * 1000, 1),
+            "analyzed_at":   datetime.now().isoformat(),
+            "warnings":      warnings,
+            "clinical_note": "Demo result — connect backend for real GradCAM output.",
+            "bbox": {
+                "model":      "EfficientNet-B4",
+                "image_b64":  None,
+                "prediction": {
+                    "label":         bbox_result["prediction"],
+                    "arabic":        bbox_result["arabic_label"],
+                    "confidence":    bbox_result["confidence"],
+                    "badge_color":   bbox_result["badge_color"],
+                    "risk_level":    bbox_result["risk_level"],
+                    "probabilities": bbox_result["probabilities"],
+                }
+            },
+            "heatmap": {
+                "model":      "ConvNeXt-Tiny",
+                "image_b64":  None,
+                "prediction": {
+                    "label":         heat_result["prediction"],
+                    "arabic":        heat_result["arabic_label"],
+                    "confidence":    heat_result["confidence"],
+                    "badge_color":   heat_result["badge_color"],
+                    "risk_level":    heat_result["risk_level"],
+                    "probabilities": heat_result["probabilities"],
+                }
+            },
+        })
+
+    # ── Real GradCAM output ──────────────────────────────────────────────────
+    dual = bbox_out  # same dict from generate_dual_output
+
+    # Fall back to ONNX result if either model image failed
+    bbox_pred = dual.get("bbox_prediction", {})
+    heat_pred = dual.get("heat_prediction", {})
+
+    return JSONResponse(content={
+        "scan_id":       scan_id,
+        "filename":      file.filename,
+        "demo_mode":     False,
+        "total_ms":      round((time.time() - t_start) * 1000, 1),
+        "analyzed_at":   datetime.now().isoformat(),
+        "warnings":      warnings,
+        "clinical_note": (
+            "This AI analysis is for decision support only. "
+            "Always confirm with a radiologist before clinical decision-making."
+        ),
+        "bbox": {
+            "model":      "EfficientNet-B4",
+            "image_b64":  dual.get("bbox_image_b64"),
+            "prediction": {
+                "label":         bbox_pred.get("label", "Unknown"),
+                "arabic":        bbox_pred.get("arabic", ""),
+                "confidence":    bbox_pred.get("confidence", 0.0),
+                "badge_color":   bbox_pred.get("badge_color", "blue"),
+                "risk_level":    bbox_pred.get("risk_level", "none"),
+                "probabilities": bbox_pred.get("probabilities", {}),
+            }
+        },
+        "heatmap": {
+            "model":      "ConvNeXt-Tiny",
+            "image_b64":  dual.get("heat_image_b64"),
+            "prediction": {
+                "label":         heat_pred.get("label", "Unknown"),
+                "arabic":        heat_pred.get("arabic", ""),
+                "confidence":    heat_pred.get("confidence", 0.0),
+                "badge_color":   heat_pred.get("badge_color", "blue"),
+                "risk_level":    heat_pred.get("risk_level", "none"),
+                "probabilities": heat_pred.get("probabilities", {}),
+            }
+        },
+    })
+
+
+# ─── Demo helper ─────────────────────────────────────────────────────────────
+
+def _demo_result(model_name: str) -> dict:
+    """Generate a plausible demo prediction result."""
+    import random
+    classes = list(CLASS_INFO.keys())
+    pred_cls = random.choice(classes)
+    info = CLASS_INFO[pred_cls]
+    confidence = round(random.uniform(82, 97), 2)
+    probs_raw = [random.uniform(0.01, 0.06) for _ in classes]
+    pred_idx = classes.index(pred_cls)
+    probs_raw[pred_idx] = confidence / 100
+    total = sum(probs_raw)
+    probs = {CLASS_INFO[c]["label"]: round(p / total * 100, 2) for c, p in zip(classes, probs_raw)}
+    return {
+        "prediction":   info["label"],
+        "arabic_label": info["arabic"],
+        "confidence":   confidence,
+        "badge_color":  info["badge"],
+        "risk_level":   info["risk"],
+        "probabilities": probs,
+    }
+
