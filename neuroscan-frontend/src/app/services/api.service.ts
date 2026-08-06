@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface PredictResult {
   scan_id: string;
@@ -61,26 +62,19 @@ export interface DualResult {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   /**
-   * In development  → uses localhost:8000
-   * In production   → uses VITE_API_URL env var (set in Netlify/Vercel)
-   *                   fallback to window.location.origin (same-origin deploy)
+   * Dynamic base URL resolution:
+   * - Development (localhost) → http://localhost:8000/api/v1
+   * - Production → deployed Render backend
    *
-   * Set environment variable in your hosting platform:
-   *   VITE_API_URL = https://neuroscan-backend.onrender.com
+   * To override, set window.__NEUROSCAN_API_URL before app loads.
    */
-  readonly BASE = 'https://neuroscan-ai-dc1e.onrender.com/api/v1';
+  get BASE(): string {
+    // Allow runtime override via global variable (set in index.html or env scripts)
+    const override = (window as any).__NEUROSCAN_API_URL;
+    if (override) return override.replace(/\/$/, '') + '/api/v1';
 
-
-    if (fromEnv) return fromEnv.replace(/\/$/, '') + '/api/v1';
-
-    // Local dev
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:8000/api/v1';
-    }
-
-    // Same-origin fallback (if frontend & backend on same domain)
-    return window.location.origin + '/api/v1';
-  })();
+    return environment.apiUrl;
+  }
 
   constructor(private http: HttpClient) {}
 
@@ -98,7 +92,8 @@ export class ApiService {
     return this.http.post<DualResult>(`${this.BASE}/predict/dual`, fd);
   }
 
-  getModels() { return this.http.get<any>(`${this.BASE}/models`); }
-  getHealth() { return this.http.get<any>(`${this.BASE}/health`); }
-  getStats()  { return this.http.get<any>(`${this.BASE}/stats`); }
+  getModels()  { return this.http.get<any>(`${this.BASE}/models`); }
+  getHealth()  { return this.http.get<any>(`${this.BASE}/health`); }
+  getStats()   { return this.http.get<any>(`${this.BASE}/stats`); }
+  getClasses() { return this.http.get<any>(`${this.BASE}/classes`); }
 }

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.3000/svg" viewBox="0 0 400 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0050cb" />
+      <stop offset="100%" stop-color="#00a3ff" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Logo Icon -->
+  <g transform="translate(10, 10)">
+    <!-- Brain Silhouette -->
+    <path d="M40 20 C20 20, 10 40, 15 60 C20 80, 30 90, 50 90 C70 90, 80 80, 85 60 C90 40, 80 20, 60 20 Z" fill="none" stroke="url(#brainGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Nodes/Neural Network inside -->
+    <circle cx="35" cy="40" r="4" fill="#0050cb" />
+    <circle cx="65" cy="45" r="5" fill="#00a3ff" />
+    <circle cx="50" cy="65" r="4" fill="#0050cb" />
+    <circle cx="30" cy="70" r="3" fill="#00a3ff" />
+    <circle cx="70" cy="75" r="3" fill="#0050cb" />
+
+    <!-- Connecting Lines -->
+    <path d="M35 40 L65 45 L50 65 L35 40 M30 70 L50 65 L70 75" fill="none" stroke="#0050cb" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Scanner Arc -->
+    <path d="M10 50 Q50 -10 90 50" fill="none" stroke="#00a3ff" stroke-width="3" stroke-dasharray="8 4" filter="url(#glow)"/>
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(120, 70)">
+    <text font-family="Inter, sans-serif" font-weight="700" font-size="42" fill="#0b1c30" letter-spacing="-1">
+      NeuroScan
+    </text>
+    <text x="215" y="0" font-family="Inter, sans-serif" font-weight="400" font-size="42" fill="#0050cb" letter-spacing="-1">
+      AI
+    </text>
+    <text x="2" y="24" font-family="Geist, sans-serif" font-weight="500" font-size="12" fill="#727687" letter-spacing="3" text-transform="uppercase">
+      Clinical Diagnostic System
+    </text>
+  </g>
+</svg>

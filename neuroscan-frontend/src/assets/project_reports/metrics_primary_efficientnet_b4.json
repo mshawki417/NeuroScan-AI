@@ -1,0 +1,18 @@
+{
+  "accuracy": 0.9475,
+  "balanced_acc": 0.9475,
+  "mcc": 0.9310669740032944,
+  "kappa": 0.9299999999999999,
+  "precision_macro": 0.9490257558331427,
+  "recall_macro": 0.9475,
+  "f1_macro": 0.946536741801866,
+  "f1_weighted": 0.9465367418018659,
+  "sensitivity_glioma": 0.8374999999979063,
+  "specificity_glioma": 0.9924999999991729,
+  "sensitivity_meningioma": 0.9599999999976,
+  "specificity_meningioma": 0.9683333333325264,
+  "sensitivity_notumor": 0.9974999999975063,
+  "specificity_notumor": 0.9766666666658528,
+  "sensitivity_pituitary": 0.9949999999975125,
+  "specificity_pituitary": 0.9924999999991729
+}

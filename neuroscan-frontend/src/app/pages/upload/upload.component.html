@@ -1,147 +1,149 @@
-<div class="upload-page">
-  <div class="upload-layout">
+<app-navbar></app-navbar>
 
-    <!-- ── LEFT: Hospital room photo as background ── -->
-    <div class="image-panel">
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col relative overflow-hidden" style="height: calc(100vh - 80px);">
+  <!-- BEGIN: Upload Section -->
+  <section class="flex-1 overflow-y-auto p-8 bg-slate-50 relative">
+    <div class="max-w-7xl mx-auto h-full flex flex-col gap-6 relative">
+      <div class="shrink-0">
+        <h1 class="text-2xl font-bold text-slate-900">Upload Files</h1>
+        <div class="flex items-center gap-2 text-sm text-slate-500 mt-1">
+          <a routerLink="/" class="hover:text-slate-900">Home</a>
+          <i class="ph ph-caret-right text-xs"></i>
+          <span class="text-slate-900 font-medium">Upload</span>
+        </div>
+      </div>
 
-      <!-- Drop zone overlay on top of photo -->
-      <div class="dropzone-overlay">
-        @if (!file()) {
-          <div class="drop-zone" [class.drag-over]="drag()"
-            (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
-            <div class="drop-cloud">
-              <svg width="40" height="40" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.6" viewBox="0 0 24 24">
-                <polyline points="16 16 12 12 8 16"/>
-                <line x1="12" y1="12" x2="12" y2="21"/>
-                <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
-              </svg>
+      <div class="flex flex-col lg:flex-row gap-6 relative flex-1 min-h-[500px]">
+        <!-- Left: Upload Area (Background Image + Dropzone) -->
+        <div class="flex-1 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 bg-slate-800"
+             (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+          <img alt="MRI Machine" class="absolute inset-0 w-full h-full object-cover"
+               src="https://lh3.googleusercontent.com/aida/AP1WRLsDwP4gcVI9VgmBf_PjMJPXuJtQgY4RPVPQMZcXxaupvHnRSTUqPhzeRNs7dcZwiaZRV16lC5LQgqNA36IT6iLv3TvHKDj_Z1zpH1hF6l9xd7UQTspaIz5pPNBIezLKfXg06_6hTz7A-E9_-Fdv2LeqK-_iJI2yvvjWfXzOKQwUazk9mM4z5zt-bPbl-sGDszYQKaWW9OI9_qE984kdfnEgBrh0pmoKBjpYhIQk9xCWSRDvZ66AgORp-vg">
+          <div class="absolute inset-0 bg-[#0f172a]/60"></div>
+
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <div class="upload-overlay w-full max-w-lg rounded-2xl border-2 border-dashed p-10 flex flex-col items-center justify-center text-center transition-all"
+                 [ngClass]="{'border-blue-400 bg-blue-900/30 scale-[1.02]': isDragging, 'border-slate-400/50': !isDragging}">
+
+              <!-- Pre-upload state -->
+              <ng-container *ngIf="!file() && !loading()">
+                <i class="ph ph-cloud-arrow-up text-5xl text-white mb-4"></i>
+                <h2 class="text-2xl font-bold text-white mb-2">Drag & Drop MRI Files</h2>
+                <p class="text-slate-300 mb-6 font-medium">or</p>
+                <input type="file" #fileInput hidden accept="image/jpeg,image/png,image/gif" (change)="onFileSelected($event)">
+                <button (click)="fileInput.click()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all transform hover:-translate-y-0.5 mb-8">
+                  Choose Files
+                </button>
+                <div class="text-slate-300 text-sm space-y-1">
+                  <p>Supported formats: JPG, PNG (for demo)</p>
+                  <p>Max file size: 10MB</p>
+                </div>
+              </ng-container>
+
+              <!-- File Selected State -->
+              <ng-container *ngIf="file() && !loading()">
+                <div class="bg-slate-900/80 border border-blue-400/30 rounded-xl p-5 backdrop-blur-md flex items-center gap-4 w-full">
+                  <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                    <i class="ph ph-file-image text-2xl text-blue-400"></i>
+                  </div>
+                  <div class="flex-1 text-left overflow-hidden">
+                    <div class="text-sm font-semibold text-white truncate max-w-[200px]">{{ file()?.name }}</div>
+                    <div class="text-xs text-white/50 mt-1">{{ fileSizeDisplay }}</div>
+                  </div>
+                  <button (click)="removeFile()" class="p-2 hover:bg-red-500/20 hover:text-red-400 text-white/50 rounded-md transition-colors">
+                    <i class="ph ph-trash"></i>
+                  </button>
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                  <button (click)="analyze()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-lg shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="ph ph-magic-wand"></i>
+                    Analyze Scan
+                  </button>
+                </div>
+              </ng-container>
+
+              <!-- Loading State -->
+              <ng-container *ngIf="loading()">
+                <i class="ph ph-spinner-gap animate-spin text-4xl text-blue-400 mb-4"></i>
+                <div class="text-base text-white/80 font-medium mb-4">Analyzing with Deep Learning...</div>
+
+                <div class="w-full flex items-center gap-3">
+                  <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-300" [style.width.%]="progress()"></div>
+                  </div>
+                  <div class="text-xs text-cyan-400 font-bold w-10 text-right">{{ progress() }}%</div>
+                </div>
+              </ng-container>
+
             </div>
-            <h3>Drag &amp; Drop MRI Files</h3>
-            <p>or</p>
-            <label class="btn-choose">
-              Choose Files
-              <input type="file" accept=".dcm,.nii,.jpg,.jpeg,.png,.bmp,.tiff" (change)="onSelect($event)" hidden/>
-            </label>
-            <div class="drop-formats">Supported formats: DICOM, NIfTI, JPG, PNG</div>
-            <div class="drop-formats">Max file size: 200MB</div>
           </div>
-        }
 
-        @if (file() && !loading()) {
-          <div class="file-ready">
-            <div class="fr-icon">
-              <svg width="26" height="26" fill="none" stroke="#22a3c4" stroke-width="1.8" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
-            </div>
-            <div class="fr-info">
-              <div class="fr-name">{{ file()!.name }}</div>
-              <div class="fr-size">{{ fmtSize(file()!.size) }}</div>
-            </div>
-            <button class="fr-remove" (click)="reset()">✕</button>
+          <!-- Error Alert -->
+          <div *ngIf="error()" class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg px-5 py-2.5 text-sm backdrop-blur-md z-20 flex items-center gap-2 shadow-lg">
+            <i class="ph ph-warning-circle text-lg"></i>
+            {{ error() }}
           </div>
-        }
 
-        @if (loading()) {
-          <div class="loading-overlay">
-            <div class="loading-spinner">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="22" stroke="rgba(255,255,255,.1)" stroke-width="3"/>
-                <circle cx="26" cy="26" r="22" stroke="#22a3c4" stroke-width="3"
-                  stroke-linecap="round" stroke-dasharray="100 40"
-                  style="animation:spin 1s linear infinite;transform-origin:center"/>
-              </svg>
+        </div>
+
+        <!-- Right: Guidelines & Details Sidebar -->
+        <div class="w-full lg:w-80 flex flex-col gap-6 z-10 shrink-0">
+
+          <!-- Scan Guidelines Card -->
+          <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2">Scan Guidelines</h3>
+            <ul class="space-y-3 text-sm text-slate-600">
+              <li class="flex items-start gap-2">
+                <i class="ph ph-check-circle text-green-500 mt-0.5 text-lg"></i>
+                <span>Ensure high quality files</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ph ph-check-circle text-green-500 mt-0.5 text-lg"></i>
+                <span>Clear and unblurred images</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ph ph-check-circle text-green-500 mt-0.5 text-lg"></i>
+                <span>Supported standard formats</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="ph ph-check-circle text-green-500 mt-0.5 text-lg"></i>
+                <span>Review data before upload</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Scan Details Card -->
+          <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-900 mb-4">Scan Details</h3>
+
+            <div *ngIf="!file()" class="flex items-center justify-center p-6 border-2 border-dashed border-slate-200 rounded-lg bg-slate-50 mb-4">
+              <p class="text-sm text-slate-500 italic">No file selected</p>
             </div>
-            <div class="loading-text">{{ statusMsg() }}</div>
-            <div class="prog-wrap">
-              <div class="prog-bar">
-                <div class="prog-fill" [style.width.%]="progress()"></div>
+
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">File Name</span>
+                <span class="font-medium text-slate-900 max-w-[120px] truncate" [title]="file()?.name || '-'">{{ file()?.name || '-' }}</span>
               </div>
-              <span class="prog-pct">{{ progress() }}%</span>
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">File Size</span>
+                <span class="font-medium text-slate-900">{{ fileSizeDisplay || '-' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">Dimensions</span>
+                <span class="font-medium text-slate-900">-</span>
+              </div>
+              <div class="flex justify-between items-center py-2">
+                <span class="text-slate-500">Scan Type</span>
+                <span class="font-medium text-slate-900">Brain MRI</span>
+              </div>
             </div>
-            @if (demoMode()) {
-              <div class="demo-badge">⚡ Demo Mode — Backend Offline</div>
-            }
           </div>
-        }
-      </div>
 
-      <!-- Analyze button -->
-      @if (file() && !loading()) {
-        <div class="analyze-wrap">
-          <button class="btn-analyze" (click)="analyze()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            Start AI Analysis
-          </button>
-        </div>
-      }
-
-      @if (error()) {
-        <div class="error-bar">⚠ {{ error() }}</div>
-      }
-    </div>
-
-    <!-- ── RIGHT: Info panel (light) ── -->
-    <div class="right-panel">
-      <div class="right-inner">
-        <div class="rp-header">
-          <h2 class="rp-title">Upload MRI Scan</h2>
-          <div class="breadcrumb">Home <span>›</span> Upload MRI</div>
-        </div>
-
-        <div class="guide-section">
-          <div class="guide-title">
-            <svg width="14" height="14" fill="none" stroke="#10b981" stroke-width="2" viewBox="0 0 24 24">
-              <polyline points="9 11 12 14 22 4"/>
-              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-            </svg>
-            Scan Guidelines
-          </div>
-          @for (g of guidelines; track g) {
-            <div class="guide-row">
-              <svg width="13" height="13" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>{{ g }}</span>
-            </div>
-          }
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="detail-section">
-          <div class="det-title">Scan Details</div>
-          @if (!file()) {
-            <div class="no-file">No file selected</div>
-          }
-          @for (d of [
-            {lbl:'File Name',   val: file()?.name},
-            {lbl:'File Size',   val: file() ? fmtSize(file()!.size) : null},
-            {lbl:'Dimensions',  val: file() ? '512×512' : null},
-            {lbl:'Scan Type',   val: file() ? 'T1-weighted' : null}
-          ]; track d.lbl) {
-            <div class="det-row">
-              <span class="det-lbl">{{ d.lbl }}</span>
-              <span class="det-val">{{ d.val || '—' }}</span>
-            </div>
-          }
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="backend-section">
-          <div class="det-title">Backend Status</div>
-          <div class="be-row">
-            <div class="be-dot" [class.connected]="!demoMode()"></div>
-            <span class="be-status">{{ demoMode() ? 'Demo Mode (Offline)' : 'Connected' }}</span>
-          </div>
-          <div class="be-url">localhost:8000</div>
         </div>
       </div>
     </div>
-
-  </div>
-</div>
+  </section>
+</main>

@@ -1,11 +1,13 @@
 import { Component, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-upload', standalone: true,
-  imports: [RouterLink, HttpClientModule],
+  imports: [RouterLink, HttpClientModule, CommonModule, NavbarComponent],
   providers: [ApiService],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
@@ -29,12 +31,17 @@ export class UploadComponent {
     'Supported: T1, T2, FLAIR',
   ];
 
+  get isDragging() { return this.drag(); }
+  get fileSizeDisplay() { return this.file() ? this.fmtSize(this.file()!.size) : ''; }
+
   onDragOver(e: DragEvent)  { e.preventDefault(); this.drag.set(true); }
-  onDragLeave()              { this.drag.set(false); }
-  onDrop(e: DragEvent)       { e.preventDefault(); this.drag.set(false); const f=e.dataTransfer?.files[0]; if(f) this.setFile(f); }
-  onSelect(e: Event)         { const f=(e.target as HTMLInputElement).files?.[0]; if(f) this.setFile(f); }
-  setFile(f: File)           { this.file.set(f); this.error.set(''); this.progress.set(0); }
-  fmtSize(b: number)         { return (b/1024/1024).toFixed(2)+' MB'; }
+  onDragLeave(e?: DragEvent){ if(e) e.preventDefault(); this.drag.set(false); }
+  onDrop(e: DragEvent)      { e.preventDefault(); this.drag.set(false); const f=e.dataTransfer?.files[0]; if(f) this.setFile(f); }
+  onFileSelected(e: Event)  { const f=(e.target as HTMLInputElement).files?.[0]; if(f) this.setFile(f); }
+  onSelect(e: Event)        { this.onFileSelected(e); }
+  setFile(f: File)          { this.file.set(f); this.error.set(''); this.progress.set(0); }
+  removeFile()              { this.file.set(null); }
+  fmtSize(b: number)        { return (b/1024/1024).toFixed(2)+' MB'; }
 
   analyze() {
     const f = this.file();

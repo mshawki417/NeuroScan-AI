@@ -1,152 +1,259 @@
-<div class="page fade-up">
-  <div class="page-head">
-    <h2 class="page-title">Project Details</h2>
-    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Project Details</span></div>
+<app-navbar></app-navbar>
+
+<!-- BEGIN: Page Content -->
+<main class="flex-1 overflow-y-auto bg-slate-50" style="height: calc(100vh - 80px);">
+  <div class="max-w-7xl mx-auto p-6">
+    
+    <!-- Page Title -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-slate-800">Project Details</h1>
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-2">
+        <i class="ph ph-stethoscope mr-1"></i> Clinical Research
+      </span>
+      <div class="flex items-center text-sm text-slate-500 mt-1 gap-2">
+        <a routerLink="/" class="hover:text-blue-600 transition-colors">Home</a>
+        <i class="ph ph-caret-right text-xs"></i>
+        <span class="text-slate-700">Project Details</span>
+      </div>
+    </div>
+
+    <!-- 2-column grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Left Column -->
+      <div class="space-y-6">
+
+        <!-- About the Project -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="ph ph-file-medical text-blue-600"></i> About the Project
+          </h2>
+          <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+            <p>This project develops and evaluates deep learning models for automatic classification of brain MRI scans into four categories: <strong class="text-slate-700">Glioma, Meningioma, Pituitary</strong>, and No Tumor.</p>
+            <p>The system delivers accurate predictions alongside model explainability (GradCAM, GradCAM++, LayerCAM) and comprehensive performance evaluation using multiple clinical metrics.</p>
+          </div>
+        </section>
+
+        <!-- Dataset Card -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
+            <i class="ph ph-database text-blue-600"></i> Dataset
+          </h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600 gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="ph ph-users"></i>
+                </div>
+                <span class="font-medium">Training Images</span>
+              </div>
+              <span class="font-bold text-slate-800">3,264</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600 gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="ph ph-file-arrow-down"></i>
+                </div>
+                <span class="font-medium">Testing Images</span>
+              </div>
+              <span class="font-bold text-slate-800">815</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600 gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="ph ph-tag"></i>
+                </div>
+                <span class="font-medium">Classes</span>
+              </div>
+              <span class="font-bold text-slate-800">4</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600 gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="ph ph-image"></i>
+                </div>
+                <span class="font-medium">Image Size</span>
+              </div>
+              <span class="font-bold text-slate-800">224 × 224</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center text-slate-600 gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="ph ph-stack"></i>
+                </div>
+                <span class="font-medium">Modalities</span>
+              </div>
+              <span class="font-bold text-slate-800">T1, T2, FLAIR</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Class Distribution Chart -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="ph ph-chart-pie text-blue-600"></i> Class Distribution
+          </h2>
+          <img src="assets/project_reports/class_distribution.png" alt="Class Distribution" class="w-full h-auto rounded-lg border border-slate-100">
+        </section>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="space-y-6">
+
+        <!-- Project Pipeline -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <i class="ph ph-flow-arrow text-blue-600"></i> Project Pipeline
+          </h2>
+          <div class="relative pl-4 border-l-2 border-slate-100 space-y-8">
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <div class="w-2 h-2 rounded-full bg-blue-600"></div>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Data Collection & Preprocessing</h3>
+                <p class="text-xs text-slate-500 mt-1">CLAHE enhancement, normalization, augmentation</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="ph ph-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Model Training</h3>
+                <p class="text-xs text-slate-500 mt-1">EfficientNet-B4, ConvNeXt-Tiny, ResNet-50</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="ph ph-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Model Evaluation</h3>
+                <p class="text-xs text-slate-500 mt-1">Accuracy, Precision, Recall, F1, MCC, Kappa</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center z-10">
+                <i class="ph ph-check text-[10px] text-blue-600"></i>
+              </div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Explainability</h3>
+                <p class="text-xs text-slate-500 mt-1">Grad-CAM, Grad-CAM++, LayerCAM</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[23px] top-1 w-5 h-5 rounded-full bg-white border-2 border-slate-300 flex items-center justify-center z-10"></div>
+              <div class="pl-4">
+                <h3 class="text-sm font-bold text-slate-800">Export & Deployment</h3>
+                <p class="text-xs text-slate-500 mt-1">ONNX, TorchScript, FastAPI</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ROC Curves -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="ph ph-chart-line text-blue-600"></i> ROC Curves (Primary Model)
+          </h2>
+          <img src="assets/project_reports/roc_curves_primary_efficientnet_b4.png" alt="ROC Curves" class="w-full h-auto rounded-lg border border-slate-100">
+        </section>
+
+      </div>
+
+      <!-- Full-Width Bottom Section -->
+      <div class="col-span-1 lg:col-span-2 space-y-6">
+
+        <!-- Models Summary Table -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm overflow-x-auto">
+          <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="ph ph-chart-bar text-blue-600"></i> Models Summary
+          </h2>
+          <table class="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+              <tr class="border-b border-slate-200 text-xs text-slate-500 font-medium uppercase tracking-wider">
+                <th class="py-3 px-4 font-semibold">Model</th>
+                <th class="py-3 px-4 font-semibold">Best Accuracy</th>
+                <th class="py-3 px-4 font-semibold">F1 Score</th>
+                <th class="py-3 px-4 font-semibold">MCC</th>
+                <th class="py-3 px-4 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm text-slate-700 divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="py-4 px-4 font-bold text-slate-800">ConvNeXt-Tiny</td>
+                <td class="py-4 px-4">95.69%</td>
+                <td class="py-4 px-4">95.63%</td>
+                <td class="py-4 px-4">0.944</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Best Model</span>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="py-4 px-4 font-bold text-slate-800">EfficientNet-B4</td>
+                <td class="py-4 px-4">94.75%</td>
+                <td class="py-4 px-4">94.65%</td>
+                <td class="py-4 px-4">0.931</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Primary Model</span>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="py-4 px-4 font-bold text-slate-800">ResNet-50</td>
+                <td class="py-4 px-4">94.13%</td>
+                <td class="py-4 px-4">94.06%</td>
+                <td class="py-4 px-4">0.923</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">Baseline</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Confusion Matrices -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <section class="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
+            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+              <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">PRIMARY</span>
+              EfficientNet-B4
+            </h3>
+            <img src="assets/project_reports/confusion_matrix_primary_efficientnet_b4.png" alt="Confusion Matrix EfficientNet" class="w-full h-auto rounded-lg border border-slate-100">
+          </section>
+          <section class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="font-bold text-slate-800 mb-3 text-sm">ResNet-50</h3>
+            <img src="assets/project_reports/confusion_matrix_resnet50.png" alt="Confusion Matrix ResNet" class="w-full h-auto rounded-lg border border-slate-100">
+          </section>
+          <section class="bg-white rounded-xl border border-emerald-200 p-5 shadow-sm">
+            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+              <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700">BEST</span>
+              ConvNeXt-Tiny
+            </h3>
+            <img src="assets/project_reports/confusion_matrix_convnext_tiny.png" alt="Confusion Matrix ConvNeXt" class="w-full h-auto rounded-lg border border-slate-100">
+          </section>
+        </div>
+
+        <!-- Training Curves + GradCAM -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <i class="ph ph-trend-up text-blue-600"></i> Training Curves (EfficientNet)
+            </h2>
+            <img src="assets/project_reports/training_curves_efficientnet_b4.png" alt="Training Curves" class="w-full h-auto rounded-lg border border-slate-100">
+          </section>
+          <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <i class="ph ph-eye text-purple-600"></i> Explainability — Grad-CAM++
+            </h2>
+            <div class="bg-slate-900 rounded-lg overflow-hidden">
+              <img src="assets/project_reports/gradcam_gradcam++_primary_efficientnet_b4.png" alt="GradCAM" class="w-full h-auto">
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </div>
   </div>
-
-  <div class="proj-grid">
-
-    <!-- ── LEFT: About + Features ── -->
-    <div class="left-col">
-      <div class="card about-card">
-        <!-- Brain visual -->
-        <div class="brain-vis">
-          <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="bg2" cx="50%" cy="50%" r="55%">
-                <stop offset="0%" stop-color="#0f2040"/>
-                <stop offset="100%" stop-color="#060d1b"/>
-              </radialGradient>
-            </defs>
-            <rect width="200" height="180" fill="url(#bg2)" rx="8"/>
-            <!-- Rings -->
-            <circle cx="100" cy="90" r="70" fill="none" stroke="rgba(59,142,240,.15)" stroke-width="1" stroke-dasharray="5 3"/>
-            <circle cx="100" cy="90" r="50" fill="none" stroke="rgba(34,211,238,.1)" stroke-width="1" stroke-dasharray="3 4"/>
-            <circle cx="100" cy="90" r="32" fill="none" stroke="rgba(59,142,240,.12)" stroke-width=".8"/>
-            <!-- Brain shape -->
-            <ellipse cx="100" cy="90" rx="42" ry="38" fill="rgba(13,24,48,.8)" stroke="#1e3a80" stroke-width="1.2"/>
-            <ellipse cx="100" cy="90" rx="32" ry="28" fill="rgba(10,18,36,.7)" stroke="rgba(59,142,240,.3)" stroke-width=".8"/>
-            <path d="M82 74 Q100 65 118 74 Q127 86 118 102 Q100 111 82 102 Q73 88 82 74" fill="rgba(16,30,62,.6)" stroke="#1e3070" stroke-width=".7"/>
-            <!-- Glow core -->
-            <circle cx="100" cy="90" r="8" fill="rgba(34,211,238,.15)"/>
-            <circle cx="100" cy="90" r="4" fill="#22d3ee" opacity=".7"/>
-            <!-- Orbit dots -->
-            <circle cx="100" cy="28" r="3" fill="#3b8ef0" opacity=".8"/>
-            <circle cx="162" cy="90" r="3" fill="#22d3ee" opacity=".6"/>
-            <circle cx="100" cy="152" r="3" fill="#3b8ef0" opacity=".6"/>
-            <circle cx="38"  cy="90" r="3" fill="#22d3ee" opacity=".6"/>
-          </svg>
-        </div>
-        <div class="about-content">
-          <h3>About the Project</h3>
-          <p>NeuroScan AI is a deep learning based system designed to classify brain MRI scans into four categories: Glioma, Meningioma, Pituitary and No Tumor.</p>
-          <p>The system leverages state-of-the-art convolutional neural networks to deliver accurate, fast and reliable predictions to assist radiologists in clinical decision making.</p>
-          <div class="about-tags">
-            <span class="badge b-blue">Deep Learning</span>
-            <span class="badge b-cyan">Computer Vision</span>
-            <span class="badge b-green" style="margin-top:6px">Medical AI</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card features-card">
-        <div class="sec-title">Key Features</div>
-        <div class="feat-grid">
-          @for (f of features; track f) {
-            <div class="feat-item">
-              <svg width="12" height="12" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>{{ f }}</span>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
-
-    <!-- ── MIDDLE: Pipeline ── -->
-    <div class="card pipeline-card">
-      <div class="sec-title">Pipeline — 17 Stages</div>
-      <div class="pipeline-list">
-        @for (s of pipeline; track s.n) {
-          <div class="pipe-step" [class.last]="s.n === '17'">
-            <div class="pipe-num">{{ s.n }}</div>
-            <div class="pipe-connector" [class.hidden]="s.n === '17'"></div>
-            <div class="pipe-lbl">{{ s.l }}</div>
-          </div>
-        }
-      </div>
-    </div>
-
-    <!-- ── RIGHT: Details ── -->
-    <div class="right-col">
-
-      <!-- Objective + Dataset -->
-      <div class="obj-row">
-        <div class="card obj-card">
-          <div class="obj-icon">🎯</div>
-          <div class="obj-title">Objective</div>
-          <p>Build an AI system for accurate classification of brain tumors using MRI scans.</p>
-        </div>
-        <div class="card obj-card">
-          <div class="obj-icon">📦</div>
-          <div class="obj-title">Dataset</div>
-          <p>Brain MRI dataset with four classes and multiple imaging modalities.</p>
-        </div>
-      </div>
-
-      <!-- Models -->
-      <div class="card">
-        <div class="sec-title">Models Used</div>
-        @for (m of models; track m.name) {
-          <div class="model-row">
-            <div class="model-dot" [style.background]="m.color" [style.box-shadow]="'0 0 7px '+m.color"></div>
-            <div class="model-info">
-              <div class="model-name">{{ m.name }}</div>
-              <div class="model-role">{{ m.role }}</div>
-            </div>
-            <div class="model-acc" [style.color]="m.color">{{ m.acc }}</div>
-          </div>
-        }
-      </div>
-
-      <!-- Technologies -->
-      <div class="card">
-        <div class="sec-title">Technologies</div>
-        <div class="tech-grid">
-          @for (t of tech; track t.name) {
-            <div class="tech-chip">
-              <span class="tech-icon">{{ t.icon }}</span>
-              <span class="tech-name" [style.color]="t.color">{{ t.name }}</span>
-            </div>
-          }
-        </div>
-      </div>
-
-      <!-- Strengths -->
-      <div class="card">
-        <div class="sec-title">Strengths</div>
-        @for (s of strengths; track s.t) {
-          <div class="str-item">
-            <svg width="12" height="12" fill="#22d3ee" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <div>
-              <div class="str-title">{{ s.t }}</div>
-              <div class="str-desc">{{ s.d }}</div>
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- Model Exports -->
-      <div class="card">
-        <div class="sec-title">Model Exports</div>
-        @for (e of exports; track e.fmt) {
-          <div class="exp-row">
-            <span class="badge b-cyan">{{ e.fmt }}</span>
-            <span class="exp-file">{{ e.file }}</span>
-            <span class="exp-size">{{ e.size }}</span>
-          </div>
-        }
-      </div>
-    </div>
-
-  </div>
-</div>
+</main>

@@ -3,9 +3,9 @@ import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
-  selector: 'app-project', standalone: true,
+  selector: 'app-landing',
+  standalone: true,
   imports: [RouterLink, NavbarComponent],
-  templateUrl: './project.component.html',
-  styleUrl: './project.component.scss'
+  templateUrl: './landing.component.html',
 })
-export class ProjectComponent {}
+export class LandingComponent {}

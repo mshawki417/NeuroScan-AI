@@ -1,0 +1,20 @@
+{
+  "image_path": "data\\Testing\\glioma\\Te-gl_1.jpg",
+  "predicted_class": "glioma",
+  "predicted_index": 0,
+  "confidence": 0.5362502932548523,
+  "class_probabilities": {
+    "glioma": 0.5362502932548523,
+    "meningioma": 0.2876693904399872,
+    "notumor": 0.11783717572689056,
+    "pituitary": 0.05824313312768936
+  },
+  "bounding_box": [
+    91,
+    25,
+    50,
+    39
+  ],
+  "inference_time_ms": 29.598700115457177,
+  "warning": null
+}

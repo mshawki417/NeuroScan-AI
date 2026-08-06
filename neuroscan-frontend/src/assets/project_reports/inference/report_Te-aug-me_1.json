@@ -1,0 +1,20 @@
+{
+  "image_path": "data\\Testing\\meningioma\\Te-aug-me_1.jpg",
+  "predicted_class": "meningioma",
+  "predicted_index": 1,
+  "confidence": 0.709107518196106,
+  "class_probabilities": {
+    "glioma": 0.10235433280467987,
+    "meningioma": 0.709107518196106,
+    "notumor": 0.05485568568110466,
+    "pituitary": 0.13368244469165802
+  },
+  "bounding_box": [
+    91,
+    126,
+    69,
+    44
+  ],
+  "inference_time_ms": 23.356599966064095,
+  "warning": null
+}

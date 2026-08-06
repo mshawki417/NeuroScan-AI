@@ -1,251 +1,264 @@
-<div class="page fade-up">
+<app-navbar></app-navbar>
 
-  <!-- ── Header ── -->
-  <div class="page-head">
-    <div>
-      <h2 class="page-title">AI Analysis Result</h2>
-      <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>AI Analysis</span></div>
-    </div>
-    <div class="head-meta">
-      @if (isDemo) { <span class="demo-tag">⚡ Demo Mode</span> }
-      <div class="scan-id">{{ scanId }}</div>
-      <div class="scan-time">{{ analyzedAt }}</div>
-    </div>
-  </div>
-
-  @if (warnings.length) {
-    <div class="warn-bar">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>{{ warnings[0] }}</span>
-    </div>
-  }
-
-  <!-- ── DUAL OUTPUT ── -->
-  <div class="dual-grid">
-
-    <!-- ════ LEFT: EfficientNet-B4 → BBox ════ -->
-    <div class="model-panel card">
-
-      <!-- Model badge -->
-      <div class="model-badge">
-        <div class="mb-dot" style="background:var(--primary-lt);box-shadow:0 0 7px var(--primary-lt)"></div>
-        <div>
-          <div class="mb-name">EfficientNet-B4</div>
-          <div class="mb-role">Bounding Box Detection</div>
+<main class="flex-1 overflow-y-auto bg-slate-50" style="height: calc(100vh - 80px);">
+  <div class="max-w-7xl mx-auto p-6 flex flex-col gap-6">
+    
+    <!-- Page Header -->
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900">AI Analysis Result</h1>
+        <div class="flex items-center gap-2 text-sm text-slate-500 mt-1">
+          <a routerLink="/upload" class="hover:text-slate-900">Home</a>
+          <i class="ph ph-caret-right text-xs"></i>
+          <span class="text-slate-900 font-medium">Analysis</span>
         </div>
-        <div class="mb-acc">94.75%</div>
       </div>
+      <div class="text-right flex flex-col items-end gap-1">
+        @if (isDemo) {
+          <span class="inline-flex items-center gap-1 text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-3 py-1 rounded-full">
+            <i class="ph ph-lightning"></i> Demo Mode
+          </span>
+        }
+        <div class="font-mono text-xs text-slate-400">{{ scanId }}</div>
+        <div class="text-xs text-slate-400">{{ analyzedAt }}</div>
+      </div>
+    </div>
 
-      <!-- Output image -->
-      <div class="output-img-wrap">
-        @if (bboxSrc()) {
-          <img [src]="bboxSrc()" class="output-img" alt="EfficientNet BBox"/>
-          <div class="img-overlay-label bbox-label">
-            <svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            Bounding Box
+    <!-- Warning Bar -->
+    @if (warnings.length) {
+      <div class="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 text-sm text-yellow-800">
+        <i class="ph ph-warning text-lg flex-shrink-0"></i>
+        <span>{{ warnings[0] }}</span>
+      </div>
+    }
+
+    <!-- DUAL GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- LEFT: EfficientNet-B4 → BBox -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-5 p-5">
+
+        <!-- Model Badge -->
+        <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+          <div class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6] flex-shrink-0"></div>
+          <div class="flex-1">
+            <div class="text-sm font-bold text-slate-900">EfficientNet-B4</div>
+            <div class="text-xs text-slate-500">Bounding Box Detection</div>
           </div>
-        } @else {
-          <!-- Demo placeholder when no backend image -->
-          <div class="demo-img-placeholder">
-            <div class="demo-brain-container">
-              <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="demo-brain-svg">
+          <div class="text-sm font-bold text-blue-600">94.75%</div>
+        </div>
+
+        <!-- Output Image -->
+        <div class="relative rounded-xl overflow-hidden bg-slate-900 border border-slate-800 aspect-square">
+          @if (bboxSrc()) {
+            <img [src]="bboxSrc()" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-500" alt="EfficientNet BBox" (click)="openLightbox(bboxSrc())">
+            <div class="absolute top-3 left-3 flex items-center gap-1.5 bg-black/70 backdrop-blur-sm text-green-400 border border-green-500/30 rounded-lg px-3 py-1.5 text-xs font-semibold">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+              Bounding Box
+            </div>
+          } @else {
+            <div class="w-full h-full flex flex-col items-center justify-center gap-3">
+              <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-4/5 h-4/5">
                 <rect width="300" height="300" fill="#06090f"/>
                 <ellipse cx="150" cy="150" rx="120" ry="110" fill="#0d1830" stroke="#1a2a50" stroke-width="1.5"/>
                 <ellipse cx="150" cy="150" rx="95" ry="86" fill="#0a1220" stroke="#1e3a80" stroke-width="1"/>
                 <path d="M106 100 Q150 80 194 100 Q218 130 194 168 Q150 188 106 168 Q82 138 106 100" fill="#0d1428" stroke="#162040" stroke-width="1"/>
                 <ellipse cx="175" cy="118" rx="28" ry="22" fill="#111e3c" stroke="#1e3060" stroke-width=".8"/>
-                <!-- Bounding box -->
-                <rect x="148" y="95" width="56" height="46" fill="none" stroke="var(--green)" stroke-width="2.5"/>
-                <!-- Corner accents -->
-                <polyline points="148,95 148,107" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="148,95 160,95" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="204,95 192,95" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="204,95 204,107" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="148,141 148,129" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="148,141 160,141" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="204,141 192,141" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <polyline points="204,141 204,129" stroke="var(--green)" stroke-width="3.5" fill="none"/>
-                <!-- Label -->
+                <rect x="148" y="95" width="56" height="46" fill="none" stroke="#22c55e" stroke-width="2.5"/>
                 <rect x="148" y="80" width="84" height="16" rx="3" fill="#22c55e"/>
                 <text x="190" y="92" text-anchor="middle" fill="#000" font-size="9" font-weight="700">Tumor Region</text>
-                <!-- Confidence -->
-                <rect x="152" y="128" width="44" height="14" rx="3" fill="rgba(0,0,0,.7)"/>
-                <text x="174" y="139" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">94.8%</text>
-                <text x="10" y="20" fill="rgba(255,255,255,.6)" font-size="10">EfficientNet-B4</text>
+                <text x="10" y="20" fill="rgba(255,255,255,.5)" font-size="10">EfficientNet-B4</text>
               </svg>
-            </div>
-            <div class="demo-note">Connect backend for real BBox output</div>
-          </div>
-        }
-      </div>
-
-      <!-- Prediction result -->
-      @if (bboxPred) {
-        <div class="pred-block">
-          <div class="pred-row">
-            <div class="pred-lbl">Prediction</div>
-            <div class="pred-val">
-              <span class="badge" [class]="badgeCls(bboxPred.badge_color)">{{ bboxPred.label }}</span>
-              @if (bboxPred.arabic) { <span class="arabic-lbl">{{ bboxPred.arabic }}</span> }
-            </div>
-          </div>
-          <div class="pred-row">
-            <div class="pred-lbl">Confidence</div>
-            <div class="pred-conf">
-              <div class="conf-bar-wrap">
-                <div class="conf-bar" [style.width.%]="bboxPred.confidence"
-                     [style.background]="bboxPred.badge_color === 'green' ? '#22c55e' : bboxPred.badge_color === 'red' ? '#ef4444' : bboxPred.badge_color === 'blue' ? '#3b8ef0' : '#eab308'"></div>
-              </div>
-              <span class="conf-num">{{ bboxPred.confidence }}%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="probs-section">
-          <div class="probs-title">Class Probabilities</div>
-          @for (p of probsOf('bbox'); track p.label) {
-            <div class="prob-row">
-              <span class="prob-lbl">{{ p.label }}</span>
-              <div class="prob-track"><div class="prob-fill" [style.width.%]="p.val" [style.background]="p.color"></div></div>
-              <span class="prob-pct" [style.color]="p.color">{{ p.val }}%</span>
+              <div class="text-xs text-slate-500">Connect backend for real BBox output</div>
             </div>
           }
         </div>
-      }
 
-      <button class="dl-btn" (click)="download('bbox')">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download BBox Image
-      </button>
-    </div>
+        <!-- Prediction -->
+        @if (bboxPred) {
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500">Prediction</span>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold px-3 py-1 rounded-full {{ badgeCls(bboxPred.badge_color) }}">{{ bboxPred.label }}</span>
+                @if (bboxPred.arabic) { <span class="text-xs text-slate-500" dir="rtl">{{ bboxPred.arabic }}</span> }
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+              <span class="text-xs text-slate-500 shrink-0">Confidence</span>
+              <div class="flex items-center gap-2 flex-1">
+                <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full rounded-full transition-all duration-500"
+                       [style.width.%]="bboxPred.confidence"
+                       [style.background]="bboxPred.badge_color === 'green' ? '#22c55e' : bboxPred.badge_color === 'red' ? '#ef4444' : bboxPred.badge_color === 'blue' ? '#3b82f6' : '#eab308'"></div>
+                </div>
+                <span class="text-sm font-bold text-slate-800 w-12 text-right">{{ bboxPred.confidence }}%</span>
+              </div>
+            </div>
+          </div>
 
-    <!-- ════ RIGHT: ConvNeXt-Tiny → Heatmap ════ -->
-    <div class="model-panel card">
+          <div class="bg-slate-50 rounded-lg p-4">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Class Probabilities</div>
+            <div class="space-y-2">
+              @for (p of probsOf('bbox'); track p.label) {
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-slate-600 w-20 shrink-0">{{ p.label }}</span>
+                  <div class="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full" [style.width.%]="p.val" [style.background]="p.color"></div>
+                  </div>
+                  <span class="text-xs font-bold w-10 text-right" [style.color]="p.color">{{ p.val }}%</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
 
-      <div class="model-badge">
-        <div class="mb-dot" style="background:var(--accent-lt);box-shadow:0 0 7px var(--accent-lt)"></div>
-        <div>
-          <div class="mb-name">ConvNeXt-Tiny</div>
-          <div class="mb-role">GradCAM Heatmap</div>
-        </div>
-        <div class="mb-acc" style="color:var(--accent-lt)">95.69%</div>
+        <button (click)="download('bbox')" class="w-full flex items-center justify-center gap-2 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-600 font-medium hover:bg-slate-50 transition-colors mt-auto">
+          <i class="ph ph-download-simple"></i>
+          Download BBox Image
+        </button>
       </div>
 
-      <div class="output-img-wrap">
-        @if (heatSrc()) {
-          <img [src]="heatSrc()" class="output-img" alt="ConvNeXt Heatmap"/>
-          <div class="img-overlay-label heat-label">
-            <svg width="12" height="12" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-            GradCAM Heatmap
+      <!-- RIGHT: ConvNeXt-Tiny → Heatmap -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-5 p-5">
+
+        <!-- Model Badge -->
+        <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+          <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] flex-shrink-0"></div>
+          <div class="flex-1">
+            <div class="text-sm font-bold text-slate-900">ConvNeXt-Tiny</div>
+            <div class="text-xs text-slate-500">GradCAM Heatmap</div>
           </div>
-          <!-- Colour bar legend -->
-          <div class="colorbar">
-            <div class="cb-gradient"></div>
-            <div class="cb-labels"><span>High</span><span>Low</span></div>
-          </div>
-        } @else {
-          <div class="demo-img-placeholder">
-            <div class="demo-brain-container">
-              <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="demo-brain-svg">
+          <div class="text-sm font-bold text-cyan-600">95.69%</div>
+        </div>
+
+        <!-- Output Image -->
+        <div class="relative rounded-xl overflow-hidden bg-slate-900 border border-slate-800 aspect-square">
+          @if (heatSrc()) {
+            <img [src]="heatSrc()" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-500" alt="ConvNeXt Heatmap" (click)="openLightbox(heatSrc())">
+            <div class="absolute top-3 left-3 flex items-center gap-1.5 bg-black/70 backdrop-blur-sm text-red-400 border border-red-500/30 rounded-lg px-3 py-1.5 text-xs font-semibold">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+              GradCAM Heatmap
+            </div>
+            <!-- Color bar -->
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+              <div class="w-3 h-28 rounded-full" style="background: linear-gradient(to bottom, #ff0000, #ff8800, #ffff00, #00aaff, #0000ff)"></div>
+              <div class="flex flex-col justify-between h-28 text-[9px] text-white/60">
+                <span>High</span><span>Low</span>
+              </div>
+            </div>
+          } @else {
+            <div class="w-full h-full flex flex-col items-center justify-center gap-3">
+              <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-4/5 h-4/5">
                 <defs>
                   <radialGradient id="demoHeat" cx="175" cy="118" r="70" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"   stop-color="#ff2222" stop-opacity=".92"/>
-                    <stop offset="30%"  stop-color="#ff7700" stop-opacity=".75"/>
-                    <stop offset="55%"  stop-color="#ffdd00" stop-opacity=".5"/>
-                    <stop offset="75%"  stop-color="#00aaff" stop-opacity=".25"/>
+                    <stop offset="0%" stop-color="#ff2222" stop-opacity=".9"/>
+                    <stop offset="40%" stop-color="#ff7700" stop-opacity=".6"/>
+                    <stop offset="70%" stop-color="#ffdd00" stop-opacity=".3"/>
                     <stop offset="100%" stop-color="transparent"/>
                   </radialGradient>
-                  <linearGradient id="cbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%"   stop-color="#ff0000"/>
-                    <stop offset="25%"  stop-color="#ff8800"/>
-                    <stop offset="50%"  stop-color="#ffff00"/>
-                    <stop offset="75%"  stop-color="#00aaff"/>
+                  <linearGradient id="cbGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ff0000"/>
+                    <stop offset="50%" stop-color="#ffff00"/>
                     <stop offset="100%" stop-color="#0000ff"/>
                   </linearGradient>
                 </defs>
                 <rect width="300" height="300" fill="#06090f"/>
                 <ellipse cx="150" cy="150" rx="120" ry="110" fill="#0d1830" stroke="#1a2a50" stroke-width="1.5"/>
                 <ellipse cx="150" cy="150" rx="95" ry="86" fill="#0a1220"/>
-                <path d="M106 100 Q150 80 194 100 Q218 130 194 168 Q150 188 106 168 Q82 138 106 100" fill="#0d1428" stroke="#162040" stroke-width="1"/>
-                <!-- Heat overlay -->
                 <ellipse cx="150" cy="150" rx="120" ry="110" fill="url(#demoHeat)"/>
-                <!-- Colour bar -->
-                <rect x="278" y="10" width="12" height="280" rx="3" fill="url(#cbGrad)"/>
-                <text x="272" y="9"   fill="rgba(255,255,255,.7)" font-size="8" text-anchor="end">H</text>
-                <text x="272" y="294" fill="rgba(255,255,255,.7)" font-size="8" text-anchor="end">L</text>
-                <text x="10" y="20" fill="rgba(255,255,255,.6)" font-size="10">ConvNeXt-Tiny</text>
+                <rect x="278" y="10" width="12" height="280" rx="3" fill="url(#cbGrad2)"/>
+                <text x="10" y="20" fill="rgba(255,255,255,.5)" font-size="10">ConvNeXt-Tiny</text>
               </svg>
-            </div>
-            <div class="demo-note">Connect backend for real Heatmap output</div>
-          </div>
-        }
-      </div>
-
-      @if (heatPred) {
-        <div class="pred-block">
-          <div class="pred-row">
-            <div class="pred-lbl">Prediction</div>
-            <div class="pred-val">
-              <span class="badge" [class]="badgeCls(heatPred.badge_color)">{{ heatPred.label }}</span>
-              @if (heatPred.arabic) { <span class="arabic-lbl">{{ heatPred.arabic }}</span> }
-            </div>
-          </div>
-          <div class="pred-row">
-            <div class="pred-lbl">Confidence</div>
-            <div class="pred-conf">
-              <div class="conf-bar-wrap">
-                <div class="conf-bar" [style.width.%]="heatPred.confidence"
-                     [style.background]="heatPred.badge_color === 'green' ? '#22c55e' : heatPred.badge_color === 'red' ? '#ef4444' : heatPred.badge_color === 'blue' ? '#3b8ef0' : '#eab308'"></div>
-              </div>
-              <span class="conf-num">{{ heatPred.confidence }}%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="probs-section">
-          <div class="probs-title">Class Probabilities</div>
-          @for (p of probsOf('heatmap'); track p.label) {
-            <div class="prob-row">
-              <span class="prob-lbl">{{ p.label }}</span>
-              <div class="prob-track"><div class="prob-fill" [style.width.%]="p.val" [style.background]="p.color"></div></div>
-              <span class="prob-pct" [style.color]="p.color">{{ p.val }}%</span>
+              <div class="text-xs text-slate-500">Connect backend for real Heatmap output</div>
             </div>
           }
         </div>
-      }
 
-      <button class="dl-btn" (click)="download('heatmap')">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Heatmap Image
+        <!-- Prediction -->
+        @if (heatPred) {
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500">Prediction</span>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold px-3 py-1 rounded-full {{ badgeCls(heatPred.badge_color) }}">{{ heatPred.label }}</span>
+                @if (heatPred.arabic) { <span class="text-xs text-slate-500" dir="rtl">{{ heatPred.arabic }}</span> }
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+              <span class="text-xs text-slate-500 shrink-0">Confidence</span>
+              <div class="flex items-center gap-2 flex-1">
+                <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full rounded-full transition-all duration-500"
+                       [style.width.%]="heatPred.confidence"
+                       [style.background]="heatPred.badge_color === 'green' ? '#22c55e' : heatPred.badge_color === 'red' ? '#ef4444' : heatPred.badge_color === 'blue' ? '#3b82f6' : '#eab308'"></div>
+                </div>
+                <span class="text-sm font-bold text-slate-800 w-12 text-right">{{ heatPred.confidence }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 rounded-lg p-4">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Class Probabilities</div>
+            <div class="space-y-2">
+              @for (p of probsOf('heatmap'); track p.label) {
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-slate-600 w-20 shrink-0">{{ p.label }}</span>
+                  <div class="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full" [style.width.%]="p.val" [style.background]="p.color"></div>
+                  </div>
+                  <span class="text-xs font-bold w-10 text-right" [style.color]="p.color">{{ p.val }}%</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <button (click)="download('heatmap')" class="w-full flex items-center justify-center gap-2 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-600 font-medium hover:bg-slate-50 transition-colors mt-auto">
+          <i class="ph ph-download-simple"></i>
+          Download Heatmap Image
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="flex flex-wrap gap-4 items-stretch">
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-4 flex flex-col items-center justify-center text-center min-w-[120px]">
+        <div class="text-2xl mb-1">⏱</div>
+        <div class="text-xl font-bold text-slate-900">{{ totalMs }} ms</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Total Analysis Time</div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-4 flex flex-col items-center justify-center text-center min-w-[120px]">
+        <div class="text-2xl mb-1">🧠</div>
+        <div class="text-xl font-bold text-slate-900">2</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Models Used</div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-4 flex flex-col items-center justify-center text-center min-w-[120px]">
+        <div class="text-2xl mb-1">🔬</div>
+        <div class="text-xl font-bold text-slate-900">GradCAM</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Explainability</div>
+      </div>
+      <div class="flex-1 bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-center gap-3 text-sm text-blue-700 min-w-[260px]">
+        <i class="ph ph-info text-xl flex-shrink-0"></i>
+        <span>AI analysis is for decision support only. Always confirm with a radiologist before clinical decision-making.</span>
+      </div>
+      <a routerLink="/upload" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 self-center whitespace-nowrap shadow-sm">
+        <i class="ph ph-upload-simple"></i>
+        Analyze New Scan
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- Lightbox Overlay -->
+@if (selectedImage()) {
+  <div class="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" (click)="closeLightbox()">
+    <div class="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center">
+      <img [src]="selectedImage()" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl ring-1 ring-white/20 transform transition-transform" (click)="$event.stopPropagation()">
+      <button class="absolute top-0 right-0 md:-top-4 md:-right-4 text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 p-2 rounded-full transition-colors border border-white/10" (click)="closeLightbox()">
+        <i class="ph ph-x text-xl"></i>
       </button>
     </div>
   </div>
-
-  <!-- ── Bottom Info ── -->
-  <div class="bottom-row">
-    <div class="card info-card">
-      <div class="info-icon">⏱</div>
-      <div class="info-val">{{ totalMs }} ms</div>
-      <div class="info-lbl">Total Analysis Time</div>
-    </div>
-    <div class="card info-card">
-      <div class="info-icon">🧠</div>
-      <div class="info-val">2</div>
-      <div class="info-lbl">Models Used</div>
-    </div>
-    <div class="card info-card">
-      <div class="info-icon">🔬</div>
-      <div class="info-val">GradCAM</div>
-      <div class="info-lbl">Explainability Method</div>
-    </div>
-    <div class="card disclaimer-card">
-      <svg width="14" height="14" fill="none" stroke="var(--primary-lt)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>AI analysis is for decision support only. Always confirm with a radiologist before clinical decision-making.</span>
-    </div>
-    <a routerLink="/upload" class="btn btn-primary new-scan-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Analyze New Scan
-    </a>
-  </div>
-
-</div>
+}

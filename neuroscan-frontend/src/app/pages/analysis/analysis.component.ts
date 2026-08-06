@@ -1,14 +1,22 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DualResult } from '../../services/api.service';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
-  selector: 'app-analysis', standalone: true, imports: [RouterLink],
-  templateUrl: './analysis.component.html', styleUrl: './analysis.component.scss'
+  selector: 'app-analysis', standalone: true,
+  imports: [RouterLink, CommonModule, NavbarComponent],
+  templateUrl: './analysis.component.html',
+  styleUrl: './analysis.component.scss'
 })
 export class AnalysisComponent implements OnInit {
-  result    = signal<DualResult|null>(null);
-  demoB64   = signal<string|null>(null);   // file base64 for demo overlay
+  result        = signal<DualResult|null>(null);
+  demoB64       = signal<string|null>(null);
+  selectedImage = signal<string|null>(null);
+
+  openLightbox(src: string) { this.selectedImage.set(src); }
+  closeLightbox()           { this.selectedImage.set(null); }
 
   ngOnInit() {
     const raw = sessionStorage.getItem('dualResult');
@@ -24,7 +32,6 @@ export class AnalysisComponent implements OnInit {
   bboxSrc(): string {
     const r = this.result();
     if (r?.bbox?.image_b64) return 'data:image/jpeg;base64,' + r.bbox.image_b64;
-    // demo fallback
     const d = this.demoB64();
     if (d) return 'data:image/jpeg;base64,' + d;
     return '';
@@ -51,7 +58,13 @@ export class AnalysisComponent implements OnInit {
   }
 
   badgeCls(color: string): string {
-    return ({ yellow:'b-yellow',green:'b-green',red:'b-red',blue:'b-blue' } as any)[color] ?? 'b-blue';
+    const map: Record<string,string> = {
+      yellow: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+      green:  'bg-green-100 text-green-800 border border-green-200',
+      red:    'bg-red-100 text-red-800 border border-red-200',
+      blue:   'bg-blue-100 text-blue-800 border border-blue-200',
+    };
+    return map[color] ?? 'bg-blue-100 text-blue-800 border border-blue-200';
   }
 
   get bboxPred() { return this.result()?.bbox?.prediction; }

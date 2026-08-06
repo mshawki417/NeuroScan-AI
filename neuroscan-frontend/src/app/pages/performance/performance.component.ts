@@ -1,10 +1,12 @@
 import { Component, AfterViewInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-performance', standalone: true, imports: [RouterLink],
+  selector: 'app-performance', standalone: true, imports: [RouterLink, NavbarComponent, CommonModule],
   templateUrl: './performance.component.html', styleUrl: './performance.component.scss'
 })
 export class PerformanceComponent implements AfterViewInit {

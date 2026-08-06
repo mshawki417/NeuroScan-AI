@@ -1,0 +1,20 @@
+{
+  "image_path": "data\\Testing\\notumor\\Te-no_1.jpg",
+  "predicted_class": "notumor",
+  "predicted_index": 2,
+  "confidence": 0.7265220880508423,
+  "class_probabilities": {
+    "glioma": 0.11075032502412796,
+    "meningioma": 0.08099353313446045,
+    "notumor": 0.7265220880508423,
+    "pituitary": 0.0817340835928917
+  },
+  "bounding_box": [
+    90,
+    46,
+    63,
+    114
+  ],
+  "inference_time_ms": 27.90320012718439,
+  "warning": null
+}

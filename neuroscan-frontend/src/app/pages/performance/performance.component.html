@@ -1,91 +1,126 @@
-<div class="page fade-up">
-  <div class="page-head">
-    <h2 class="page-title">Model Performance</h2>
-    <div class="breadcrumb"><a routerLink="/dashboard">Home</a><span>›</span><span>Model Performance</span></div>
-  </div>
+<app-navbar></app-navbar>
 
-  <!-- Top Metrics -->
-  <div class="metrics-row">
-    @for (m of metrics; track m.lbl) {
-      <div class="card metric-card">
-        <div class="m-lbl">{{ m.lbl }}</div>
-        <div class="m-val" [style.color]="m.color">{{ m.val }}</div>
-        <div class="m-sub">{{ m.sub }}</div>
+<main class="flex-1 overflow-y-auto bg-slate-50" style="height: calc(100vh - 80px);">
+  <div class="max-w-7xl mx-auto p-6 flex flex-col gap-6">
+
+    <!-- Page Header -->
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900">Model Performance Metrics</h1>
+        <div class="flex items-center gap-2 text-sm text-slate-500 mt-1">
+          <a routerLink="/" class="hover:text-slate-900">Home</a>
+          <i class="ph ph-caret-right text-xs"></i>
+          <span class="text-slate-900 font-medium">Performance</span>
+        </div>
       </div>
-    }
-  </div>
-
-  <!-- Bar + Confusion Matrix -->
-  <div class="row2">
-    <div class="card chart-card">
-      <div class="sec-title">Model Comparison (Accuracy %)</div>
-      <div class="chart-h"><canvas #c1></canvas></div>
+      <div class="text-right">
+        <a routerLink="/project" class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors">
+          <i class="ph ph-arrow-left"></i> Back to Project
+        </a>
+      </div>
     </div>
-    <div class="card cm-card">
-      <div class="sec-title">Confusion Matrix — ConvNeXt-Tiny</div>
-      <table class="cm-tbl">
-        <thead>
-          <tr>
-            <th class="cm-corner">Actual ↓ / Pred →</th>
-            @for (h of cm.hdrs; track h) { <th>{{ h }}</th> }
-          </tr>
-        </thead>
-        <tbody>
-          @for (r of cm.rows; track r.lbl) {
-            <tr>
-              <td class="cm-row-lbl">{{ r.lbl }}</td>
-              @for (v of r.v; track $index) {
-                <td class="cm-cell" [class]="getCls(v, r.max)">{{ v }}</td>
+
+    <!-- Top KPIs -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      @for (m of metrics; track m.lbl) {
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-full opacity-10" [style.background]="m.color"></div>
+          <div class="text-slate-500 text-sm font-medium mb-1">{{ m.lbl }}</div>
+          <div class="text-3xl font-bold text-slate-900 mb-2">{{ m.val }}</div>
+          <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider" [style.color]="m.color">{{ m.sub }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Accuracy Comparison -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+        <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2">
+          <i class="ph ph-chart-bar text-blue-500"></i> Model Accuracy
+        </h3>
+        <p class="text-xs text-slate-500 mb-6">Comparison of top models evaluated</p>
+        <div class="flex-1 min-h-[250px] relative">
+          <canvas #c1></canvas>
+        </div>
+      </div>
+
+      <!-- Confusion Matrix -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 lg:col-span-2 flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2">
+              <i class="ph ph-squares-four text-purple-500"></i> Confusion Matrix
+            </h3>
+            <p class="text-xs text-slate-500">ConvNeXt-Tiny (Best Performer)</p>
+          </div>
+          <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200">Test Split (N=815)</span>
+        </div>
+        
+        <div class="overflow-x-auto pb-2">
+          <table class="w-full text-center border-collapse text-sm">
+            <thead>
+              <tr>
+                <th class="p-2"></th>
+                <th colspan="4" class="p-2 text-xs uppercase tracking-wider text-slate-400 font-bold border-b-2 border-slate-100">Predicted Class</th>
+              </tr>
+              <tr>
+                <th class="p-2 border-b-2 border-slate-100 text-left text-xs uppercase tracking-wider text-slate-400 font-bold">True Class</th>
+                @for (h of cm.hdrs; track h) {
+                  <th class="p-2 border-b border-slate-100 font-semibold text-slate-700 w-1/4">{{ h }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of cm.rows; track r.lbl) {
+                <tr>
+                  <td class="p-3 text-left font-semibold text-slate-700 border-r border-slate-100 whitespace-nowrap">{{ r.lbl }}</td>
+                  @for (v of r.v; track v; let i=$index) {
+                    <td class="p-1">
+                      <div class="py-2.5 rounded-lg transition-colors duration-300 relative group overflow-hidden border"
+                           [ngClass]="{
+                             'bg-blue-600 text-white border-blue-700 font-bold': v/r.max > 0.8,
+                             'bg-blue-100 text-blue-900 border-blue-200 font-semibold': v/r.max > 0.04 && v/r.max <= 0.8,
+                             'bg-slate-50 text-slate-500 border-slate-100': v/r.max <= 0.04
+                           }">
+                           <span class="relative z-10">{{ v }}</span>
+                           <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
+                    </td>
+                  }
+                </tr>
               }
-            </tr>
-          }
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- ROC + Training -->
-  <div class="row2">
-    <div class="card chart-card">
-      <div class="sec-title">ROC Curve — ConvNeXt-Tiny</div>
-      <div class="chart-h"><canvas #c2></canvas></div>
-    </div>
-    <div class="card chart-card">
-      <div class="sec-title">Training Performance</div>
-      <div class="chart-h"><canvas #c3></canvas></div>
-    </div>
-  </div>
+    <!-- Charts Row 2 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- ROC Curves -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+        <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2">
+          <i class="ph ph-chart-line-up text-orange-500"></i> ROC Curves
+        </h3>
+        <p class="text-xs text-slate-500 mb-6">Multi-class AUC Performance</p>
+        <div class="flex-1 min-h-[300px] relative">
+          <canvas #c2></canvas>
+        </div>
+      </div>
 
-  <!-- Per-class table -->
-  <div class="card">
-    <div class="sec-title">Per-Class Sensitivity & Specificity</div>
-    <table class="perf-tbl">
-      <thead>
-        <tr><th>Model</th><th>Class</th><th>Sensitivity</th><th>Specificity</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-        @for (r of [
-          {m:'ConvNeXt-Tiny',  cls:'Glioma',     s:'84.25%',sp:'99.99%',w:true},
-          {m:'ConvNeXt-Tiny',  cls:'Meningioma', s:'99.25%',sp:'95.67%',w:false},
-          {m:'ConvNeXt-Tiny',  cls:'No Tumor',   s:'99.99%',sp:'98.83%',w:false},
-          {m:'ConvNeXt-Tiny',  cls:'Pituitary',  s:'99.25%',sp:'99.75%',w:false},
-          {m:'EfficientNet-B4',cls:'Glioma',     s:'83.75%',sp:'99.25%',w:true},
-          {m:'EfficientNet-B4',cls:'Meningioma', s:'96.00%',sp:'96.83%',w:false},
-          {m:'EfficientNet-B4',cls:'No Tumor',   s:'99.75%',sp:'97.67%',w:false},
-          {m:'EfficientNet-B4',cls:'Pituitary',  s:'99.50%',sp:'99.25%',w:false},
-        ]; track $index) {
-          <tr>
-            <td class="td-dim">{{ r.m }}</td>
-            <td>{{ r.cls }}</td>
-            <td [class.warn-td]="r.w">{{ r.s }}</td>
-            <td>{{ r.sp }}</td>
-            <td>
-              @if (r.w) { <span class="badge b-yellow">Needs Improvement</span> }
-              @else      { <span class="badge b-green">Good</span> }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+      <!-- Training Curves -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+        <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2">
+          <i class="ph ph-trend-up text-green-500"></i> Training Curves
+        </h3>
+        <p class="text-xs text-slate-500 mb-6">Accuracy and Loss over Epochs</p>
+        <div class="flex-1 min-h-[300px] relative">
+          <canvas #c3></canvas>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
+</main>
