@@ -210,25 +210,28 @@ async def predict_dual(
         demo_mode = True
         warnings.append(f"GradCAM unavailable — demo mode active")
 
-    # ── Demo mode: use ONNX inference for predictions, no images ─────────────
+    # ── Demo mode: use ONNX inference for predictions + original image fallback ─
     if demo_mode:
         try:
             bbox_result = run_inference(contents, file.filename or "scan.jpg", model_key="efficientnet_b4")
             heat_result = run_inference(contents, file.filename or "scan.jpg", model_key="convnext_tiny")
         except Exception:
-            import random
             # Pure demo — both models offline
             bbox_result = _demo_result("EfficientNet-B4")
             heat_result = _demo_result("ConvNeXt-Tiny")
 
+        # Encode original image as base64 fallback so frontend can display something
+        original_b64 = _encode_original_image(contents)
+
         return JSONResponse(content={
-            "scan_id":       scan_id,
-            "filename":      file.filename,
-            "demo_mode":     True,
-            "total_ms":      round((time.time() - t_start) * 1000, 1),
-            "analyzed_at":   datetime.now().isoformat(),
-            "warnings":      warnings,
-            "clinical_note": "Demo result — connect backend for real GradCAM output.",
+            "scan_id":          scan_id,
+            "filename":         file.filename,
+            "demo_mode":        True,
+            "total_ms":         round((time.time() - t_start) * 1000, 1),
+            "analyzed_at":      datetime.now().isoformat(),
+            "warnings":         warnings,
+            "clinical_note":    "Demo result — GradCAM overlays require PyTorch models.",
+            "_demo_file_b64":   original_b64,   # consumed by Angular, deleted after read
             "bbox": {
                 "model":      "EfficientNet-B4",
                 "image_b64":  None,
@@ -308,18 +311,38 @@ def _demo_result(model_name: str) -> dict:
     classes = list(CLASS_INFO.keys())
     pred_cls = random.choice(classes)
     info = CLASS_INFO[pred_cls]
-    confidence = round(random.uniform(82, 97), 2)
+
+    # Build raw probs then normalize correctly
     probs_raw = [random.uniform(0.01, 0.06) for _ in classes]
     pred_idx = classes.index(pred_cls)
-    probs_raw[pred_idx] = confidence / 100
+    probs_raw[pred_idx] = random.uniform(0.82, 0.97)
     total = sum(probs_raw)
-    probs = {CLASS_INFO[c]["label"]: round(p / total * 100, 2) for c, p in zip(classes, probs_raw)}
+    probs_norm = [p / total for p in probs_raw]
+    confidence = round(probs_norm[pred_idx] * 100, 2)
+    probs = {CLASS_INFO[c]["label"]: round(p * 100, 2) for c, p in zip(classes, probs_norm)}
+
     return {
-        "prediction":   info["label"],
-        "arabic_label": info["arabic"],
-        "confidence":   confidence,
-        "badge_color":  info["badge"],
-        "risk_level":   info["risk"],
+        "prediction":    info["label"],
+        "arabic_label":  info["arabic"],
+        "confidence":    confidence,
+        "badge_color":   info["badge"],
+        "risk_level":    info["risk"],
         "probabilities": probs,
     }
+
+
+def _encode_original_image(file_bytes: bytes, max_size: int = 512) -> str:
+    """Encode original upload as resized base64 JPEG — used as fallback in demo mode."""
+    import base64
+    import io
+    from PIL import Image
+    try:
+        img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
+        # Resize keeping aspect ratio
+        img.thumbnail((max_size, max_size), Image.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=85)
+        return base64.b64encode(buf.getvalue()).decode("utf-8")
+    except Exception:
+        return ""
 

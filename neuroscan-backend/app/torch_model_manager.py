@@ -37,18 +37,33 @@ _LOCAL_STEMS = {
 def _resolve_ckpt(key: str) -> Optional[Path]:
     """
     Return the checkpoint Path that actually exists on disk.
-    Tries Render-style (no extension) first, then local .pt style.
-    Returns None if neither exists.
+    Priority:
+      1. Render-style stem (no extension)  → model/efficientnet_b4_model
+      2. Local .pt style                   → model/efficientnet_b4.pt
+      3. Any .pt file whose name contains the key (covers GitHub Release filenames)
+         e.g. model/efficientnet_b4_ep016_score0.9845.pt
+    Returns None if nothing found.
     """
     base = Path("model")
 
-    render_path = base / _RENDER_STEMS[key]         # e.g. model/efficientnet_b4_model
-    local_path  = base / f"{_LOCAL_STEMS[key]}.pt"  # e.g. model/efficientnet_b4.pt
-
+    # 1. Render-style (no extension)
+    render_path = base / _RENDER_STEMS[key]
     if render_path.exists():
         return render_path
+
+    # 2. Local .pt style
+    local_path = base / f"{_LOCAL_STEMS[key]}.pt"
     if local_path.exists():
         return local_path
+
+    # 3. Any .pt file whose stem contains the key (GitHub Release naming)
+    if base.exists():
+        for f in base.glob("*.pt"):
+            if key.replace("_", "") in f.stem.replace("_", "").lower() or \
+               all(part in f.stem.lower() for part in key.split("_")):
+                logger.info(f"[resolve] Found release-style checkpoint: {f}")
+                return f
+
     return None
 
 
